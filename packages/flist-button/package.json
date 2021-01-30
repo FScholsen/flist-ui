@@ -6,14 +6,8 @@
     "homepage": "",
     "license": "ISC",
     "main": "dist/flist-button.js",
-    "directories": {
-        "dist": "dist",
-        "test": "__tests__",
-        "src": "src"
-    },
-    "files": [
-        "dist"
-    ],
+    "module": "dist/flist-button.js",
+    "types": "dist/flist-button.d.ts",
     "scripts": {
         "build": "rm -rf ./dist && npx tsc",
         "build:watch": "rm -rf ./dist && npx tsc --watch",
