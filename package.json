@@ -1,10 +1,11 @@
 {
   "name": "flist-ui",
   "version": "0.0.0-alpha",
+  "description": "Flist UI Web components monorepo",
   "private": true,
-  "scripts": {
-      
-  },
+  "scripts": {},
+  "author": "fscholsen <fscholsen@gmail.com>",
+  "license": "ISC",
   "devDependencies": {
     "lerna": "^3.22.1"
   }
