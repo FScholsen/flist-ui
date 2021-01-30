@@ -1,0 +1,11 @@
+{
+  "name": "flist-ui",
+  "version": "0.0.0-alpha",
+  "private": true,
+  "scripts": {
+      
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  }
+}

@@ -10,4 +10,5 @@ Typescript
 
 
 # Steps 
-- create an new git repo `git init`
+- create an new git repo : `git init`
+- create a new lerna monorepo : `npx lerna init` 

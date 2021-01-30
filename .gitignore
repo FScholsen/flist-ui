@@ -1,0 +1,19 @@
+# compiled output
+/dist
+/tmp
+
+# IDEs and editors
+.idea
+.project
+nbproject/
+.vscode/*
+
+# Logs files
+*.log
+
+# Dependency directories
+node_modules/
+
+# System Files
+.DS_Store
+Thumbs.db
