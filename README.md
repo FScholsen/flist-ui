@@ -124,4 +124,11 @@ Typescript
 ```
 
 - generate dist files of the package:
-  - `npm run build`
+  - `npm run build` (inside of a package in `flist-ui/packages/`)
+  - `npm run build` (at project root)
+
+# References links
+
+- https://github.com/patrickvaler/lit-element-typescript-rollup-starter
+
+- https://github.com/a-tarasyuk/rollup-typescript-babel

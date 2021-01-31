@@ -3,7 +3,10 @@
   "version": "0.0.0-alpha",
   "description": "Flist UI Web components monorepo",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "npx lerna run build",
+    "watch": "npx lerna run watch"
+  },
   "author": "fscholsen <fscholsen@gmail.com>",
   "license": "ISC",
   "devDependencies": {
