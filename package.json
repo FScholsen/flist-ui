@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "build": "npx lerna run build",
-    "watch": "npx lerna run watch"
+    "watch": "npx lerna run watch",
+    "prettier": "npx prettier --write ."
   },
   "author": "fscholsen <fscholsen@gmail.com>",
   "license": "ISC",

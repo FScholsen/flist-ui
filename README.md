@@ -59,27 +59,29 @@ Typescript
   - `npm install -D @babel/core @rollup/plugin-babel @babel/preset-env @babel/preset-typescript @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties`
   - create a `rollup.config.js` in this directory
 
-  ```.js
+  ```
   // rollup.config.js
   import { babel } from "@rollup/plugin-babel";
   import resolve from "@rollup/plugin-node-resolve";
-
+  import commonjs from "@rollup/plugin-commonjs";
   const input = "src/flist-button.ts";
   const outputDir = "./dist/";
   const extensions = [".ts"];
-
   const config = {
     input: input,
     output: {
       dir: outputDir,
       format: "esm",
+      sourcemap: true,
     },
     plugins: [
       resolve({ extensions }),
+      commonjs(),
       babel({
-        babelHelpers: "bundled",
-        extensions: extensions,
-        exclude: ["./node_modules/*"],
+      babelHelpers: "bundled",
+      extensions,
+      include: ["src/**/*"],
+      exclude: ["./node_modules/*"],
       }),
     ],
   };
@@ -88,47 +90,77 @@ Typescript
 
 - create a `.babelrc` in this directory
 
-  ```
-  // .babelrc
-  {
-    "presets": ["@babel/preset-env", "@babel/preset-typescript"],
-    "plugins": [
-      ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
-      ["@babel/plugin-proposal-class-properties"]
-    ]
-  }
-  ```
+```
+
+// .babelrc
+{
+  "presets": ["@babel/preset-env", "@babel/preset-typescript"],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
+    ["@babel/plugin-proposal-class-properties"]
+  ]
+}
+
+```
 
 - add lit-element as dependency:
 
-  - `cd flist-ui/packages/flist-button`
-  - `npm install lit-element`
-  - use lit-element as dependency of a package:
+- `cd flist-ui/packages/flist-button`
+- `npm install lit-element`
+- use lit-element as dependency of a package:
 
-    ```
-    // src/flist-button.ts
-    import { LitElement, html, customElement, property } from "lit-element";
-    @customElement("flist-button")
-    export class FlistButton extends LitElement {
-      ...
-    }
-    ```
+  ```
+  // src/flist-button.ts
+  import { LitElement, html, customElement, property } from "lit-element";
+  @customElement("flist-button")
+  export class FlistButton extends LitElement {
+    ...
+  }
+  ```
 
 - add scripts to the `package.json`:
 
 ```
+
 "scripts": {
   "build": "rm -rf ./dist && npx rollup --config",
   "watch": "rm -rf ./dist && npx rollup --config --watch"
 }
+
 ```
 
 - generate dist files of the package:
+
   - `npm run build` (inside of a package in `flist-ui/packages/`)
   - `npm run build` (at project root)
+
+- add Prettier
+  - cd `flist-ui`
+  - `npm install --save-dev --save-exact prettier`
+  - add a `.prettierignore`:
+
+```
+
+# Ignore artifacts:
+
+build
+dist
+node_modules
+
+```
 
 # References links
 
 - https://github.com/patrickvaler/lit-element-typescript-rollup-starter
 
 - https://github.com/a-tarasyuk/rollup-typescript-babel
+
+- https://github.com/PolymerLabs/lit-element-build-rollup
+
+- https://github.com/DJCordhose/lerna-wc-ts-monorepo-demo
+
+  - this link is useful to setup the build/dev environment
+
+- https://github.com/rough-stuff/wired-elements
+
+- https://lit-element.polymer-project.org/guide/build
