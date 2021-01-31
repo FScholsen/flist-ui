@@ -7,14 +7,12 @@ export class FlistButton extends LitElement {
   text = "awesome";
 
   clickHandler() {
-    console.log("execute virus");
+    console.log("hello");
   }
 
   // Define the element's template
   render() {
-    return html`<button @click="${this.clickHandler}">
-      ${this.text} button here
-    </button>`;
+    return html`<button @click="${this.clickHandler}">${this.text}</button>`;
   }
 }
 

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const flistButton = require('..');
+const flistButton = require("..");
 
-describe('flist-button', () => {
-    it('needs tests');
+describe("flist-button", () => {
+  it("needs tests");
 });
