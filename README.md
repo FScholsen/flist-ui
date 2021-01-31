@@ -269,6 +269,8 @@ GitHub NPM registry (GitHub Packages)
 
 - https://github.com/patrickvaler/lit-element-typescript-rollup-starter
 
+  - here it uses rollup with plugin-terser to minify dist
+
 - https://github.com/a-tarasyuk/rollup-typescript-babel
 
 - https://github.com/microsoft/TypeScript-Babel-Starter
