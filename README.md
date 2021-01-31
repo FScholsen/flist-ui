@@ -91,7 +91,6 @@ Typescript
   - create a `.babelrc` in this directory
 
   ```
-
   // .babelrc
   {
     "presets": ["@babel/preset-env", "@babel/preset-typescript"],
@@ -100,7 +99,6 @@ Typescript
       ["@babel/plugin-proposal-class-properties"]
     ]
   }
-
   ```
 
 - add lit-element as dependency:
@@ -121,12 +119,10 @@ Typescript
 - add scripts to the `package.json`:
 
 ```
-
 "scripts": {
   "build": "rm -rf ./dist && npx rollup --config",
   "watch": "rm -rf ./dist && npx rollup --config --watch"
 }
-
 ```
 
 - generate dist files of the package:  

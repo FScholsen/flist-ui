@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx lerna run build",
     "watch": "npx lerna run watch",
-    "lint": "nxp eslint ./packages/**/src/**/*.ts",
+    "lint": "npx eslint ./packages/**/src/**/*.ts",
     "prettier": "npx prettier --write ."
   },
   "author": "fscholsen <fscholsen@gmail.com>",
