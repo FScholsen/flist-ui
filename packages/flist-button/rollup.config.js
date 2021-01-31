@@ -6,8 +6,8 @@ const input = "src/flist-button.ts";
 const outputDir = "./dist/";
 const extensions = [".ts"];
 
-const config = {
-  input: input,
+export default {
+  input,
   output: {
     dir: outputDir,
     format: "esm",
@@ -24,5 +24,3 @@ const config = {
     }),
   ],
 };
-
-export default config;

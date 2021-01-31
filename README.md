@@ -155,6 +155,8 @@ node_modules
 
 - https://github.com/a-tarasyuk/rollup-typescript-babel
 
+- https://github.com/microsoft/TypeScript-Babel-Starter
+
 - https://github.com/PolymerLabs/lit-element-build-rollup
 
 - https://github.com/DJCordhose/lerna-wc-ts-monorepo-demo
@@ -164,3 +166,9 @@ node_modules
 - https://github.com/rough-stuff/wired-elements
 
 - https://lit-element.polymer-project.org/guide/build
+
+- https://github.com/johnagan/clean-webpack-plugin/blob/2b94838bd140cbf9d6b6f5449de7d1e676ed87b2/tsconfig.types.json
+
+  - useful to emit types `.d.ts` files from src into the `packages/**/dist` folders
+
+- https://github.com/PolymerLabs/lit-element-starter-ts
