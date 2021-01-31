@@ -179,12 +179,49 @@ Typescript
 
   - add a `.prettierrc`, to override the default configuration of Prettier (if needed)
 
-- add ESLint:
+- add ESLint (for the monorepo):
+
   - `npm install --D eslint`
   - `npm install --D eslint-config-prettier`, to avoid conflicts between eslint and prettier
   - `npm install --D typescript` (you must install it in order to lint with typescript-eslint)
   - `npm install --D @typescript-eslint/parser`
   - `npm install --D @typescript-eslint/eslint-plugin`
+  - `npx eslint --init` to generate a default config file, or use this one:
+
+  ```
+  module.exports = {
+    env: {
+      browser: true,
+      es2021: true,
+    },
+    extends: [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "prettier/@typescript-eslint",
+    ],
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+      ecmaVersion: 12,
+      sourceType: "module",
+    },
+    plugins: ["@typescript-eslint"],
+    rules: {},
+  };
+  ```
+
+  - install lit-analyzer `npm install -D lit-analyzer`
+
+  - add this to `package.json` scripts:
+
+  ```
+  "scripts": {
+    ...
+    "lint": "npm run lint:lit-analyzer && npx eslint './packages/**/src/**/*.ts'",
+    "lint:lit-analyzer": "npx lit-analyzer './packages/**/src/**/*.ts'"
+    ...
+  }
+  ```
 
 # References links
 
@@ -213,3 +250,14 @@ Typescript
 ## Lerna
 
 - https://github.com/lerna/lerna#getting-started
+
+## Prettier and Linter
+
+- prettier.io:
+
+  - https://prettier.io/docs/en/install.html
+  - https://prettier.io/docs/en/precommit.html
+
+- https://eslint.org/docs/user-guide/getting-started
+
+- https://github.com/prettier/eslint-config-prettier

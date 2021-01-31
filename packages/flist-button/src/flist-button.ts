@@ -1,4 +1,12 @@
-import { LitElement, html, customElement, property } from "lit-element";
+import {
+  LitElement,
+  html,
+  customElement,
+  css,
+  property,
+  TemplateResult,
+  CSSResult,
+} from "lit-element";
 
 @customElement("flist-button")
 export class FlistButton extends LitElement {
@@ -6,12 +14,22 @@ export class FlistButton extends LitElement {
   @property()
   text = "awesome";
 
-  clickHandler() {
+  static styles: CSSResult = css`
+    :host {
+      color: red;
+    }
+  `;
+
+  hoverHandler() {
+    console.log("over");
+  }
+
+  clickHandler(): void {
     console.log("hello");
   }
 
   // Define the element's template
-  render() {
+  render(): TemplateResult {
     return html`<button @click="${this.clickHandler}">${this.text}</button>`;
   }
 }
