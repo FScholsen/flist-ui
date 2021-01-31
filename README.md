@@ -229,13 +229,27 @@ Typescript
 
     - create a new Personal Access Token in GitHub settings
     - Select scopes: `write:packages`, `delete:packages` and generate the token
-    - 0d4341e2501462d737805a1c18b6faa24be6a449
-    - copy the token and paste it in a new file `.npmrc` at the root of the project, like this:
+    -
+    - copy the token and paste it in a new file `.npmrc` at the root of the package (eg `packages/flist-button/.npmrc`), like this:
 
     ```
-    registry=https://npm.pkg.github.com/FScholsen
     //npm.pkg.github.com/:\_authToken=TOKEN
+    @fscholsen:registry=https://npm.pkg.github.com/fscholsen
+    always-auth=true
     ```
+
+    Replace TOKEN by your personal access token (and `fscholsen` by your github owner name)
+
+  - add this to your `package.json` in each packages:
+
+    ```
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/fscholsen/flist-ui.git"
+    },
+    ```
+
+    and replace the `fscholsen/flist-ui` according to your name and repository name
 
 # References links
 
@@ -275,3 +289,8 @@ Typescript
 - https://eslint.org/docs/user-guide/getting-started
 
 - https://github.com/prettier/eslint-config-prettier
+
+## Publish to GitHub Packages
+
+- https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages
+- https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages#authenticating-to-github-packages
