@@ -1,5 +1,5 @@
 {
-  "name": "flist-button",
+  "name": "@fscholsen/flist-button",
   "version": "0.0.0-alpha",
   "description": "Flist UI Button component",
   "author": "fscholsen <fscholsen@gmail.com>",

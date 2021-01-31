@@ -10,6 +10,10 @@
     "lint:lit-analyzer": "npx lit-analyzer './packages/**/src/**/*.ts'",
     "prettier": "npx prettier --write ."
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fscholsen/flist-ui.git"
+  },
   "author": "fscholsen <fscholsen@gmail.com>",
   "license": "ISC",
   "devDependencies": {

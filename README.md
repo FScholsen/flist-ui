@@ -223,6 +223,20 @@ Typescript
   }
   ```
 
+- Publish package to npm using `lerna publish` (or `npm publish`)
+
+  - I am going to use GitHub Packages to store my packages in the same GitHub repo I'm using here.
+
+    - create a new Personal Access Token in GitHub settings
+    - Select scopes: `write:packages`, `delete:packages` and generate the token
+    - 0d4341e2501462d737805a1c18b6faa24be6a449
+    - copy the token and paste it in a new file `.npmrc` at the root of the project, like this:
+
+    ```
+    registry=https://npm.pkg.github.com/FScholsen
+    //npm.pkg.github.com/:\_authToken=TOKEN
+    ```
+
 # References links
 
 - https://github.com/patrickvaler/lit-element-typescript-rollup-starter
