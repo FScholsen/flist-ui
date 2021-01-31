@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fscholsen/flist-ui.git"
+    "url": "https://github.com/fscholsen/flist-ui.git"
   },
   "author": "fscholsen <fscholsen@gmail.com>",
   "license": "ISC",

@@ -29,5 +29,12 @@
   },
   "dependencies": {
     "lit-element": "^2.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fscholsen/flist-ui.git"
+  },
+  "publishConfig": {
+    "@fscholsen:registry": "https://npm.pkg.github.com/fscholsen"
   }
 }
