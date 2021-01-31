@@ -129,10 +129,43 @@ Typescript
 
 ```
 
-- generate dist files of the package:
+- generate dist files of the package:  
+  This will generate `.js` files in `./dist` from the `./src` folder :
 
   - `npm run build` (inside of a package in `flist-ui/packages/`)
   - `npm run build` (at project root, this command is an "alias" of `npx lerna run build`, this command will `run npm run` build in each package under `/packages`)
+
+- generate type declaration from `.ts` files:
+
+  - add a new `tsconfig.types.json`, to transpile source files and emit `.d.ts` files
+
+  ```
+  // ./packages/flist-button/tsconfig.types.json
+  {
+    "extends": "./tsconfig",
+    "compilerOptions": {
+      "outDir": "dist",
+      "declaration": true,
+      "declarationMap": true,
+      "isolatedModules": false,
+      "noEmit": false,
+      "allowJs": false,
+      "emitDeclarationOnly": true
+    },
+    "exclude": ["tests/**/*.ts"]
+  }
+  ```
+
+  - add this to the npm scripts in `package.json`:
+
+  ```
+  "scripts": {
+    "build": "rm -rf ./dist && npm run build:types && npx rollup --config",
+    "build:types": "npx tsc --project tsconfig.types.json"
+  }
+  ```
+
+  - `npm run build` will now generate type declarations files (in `./dist/*.d.ts`)
 
 - add Prettier
 
@@ -141,14 +174,14 @@ Typescript
   - add a `.prettierignore`:
 
   ```
-
   # Ignore artifacts:
 
   build
   dist
   node_modules
-
   ```
+
+  - add a `.prettierrc`, to override the default configuration of Prettier (if needed)
 
 - add ESLint
 
