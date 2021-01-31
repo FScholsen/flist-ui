@@ -1,21 +1,25 @@
-import {LitElement, html, customElement, property} from 'lit-element';
+import { LitElement, html, customElement, property } from "lit-element";
 
-@customElement('flist-button')
+@customElement("flist-button")
 export class FlistButton extends LitElement {
+  // Declare observed properties
+  @property()
+  text = "awesome";
 
-    // Declare observed properties
-    @property()
-    text = 'awesome';
+  clickHandler() {
+    console.log("execute virus");
+  }
 
-    // Define the element's template
-    render() {
-    return html`<button>${this.text} button here</button>`;
-    }
+  // Define the element's template
+  render() {
+    return html`<button @click="${this.clickHandler}">
+      ${this.text} button here
+    </button>`;
+  }
 }
 
 declare global {
-    interface HTMLElementTagNameMap {
-        'flist-button': FlistButton;
-    }
+  interface HTMLElementTagNameMap {
+    "flist-button": FlistButton;
+  }
 }
-
