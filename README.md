@@ -223,13 +223,12 @@ Typescript
   }
   ```
 
-- Publish package to npm using `lerna publish` (or `npm publish`)
+- Publish package to npm using `lerna publish` (or `npm publish` inside an individual package)
 
   - I am going to use GitHub Packages to store my packages in the same GitHub repo I'm using here.
 
     - create a new Personal Access Token in GitHub settings
     - Select scopes: `write:packages`, `delete:packages` and generate the token
-    -
     - copy the token and paste it in a new file `.npmrc` at the root of the package (eg `packages/flist-button/.npmrc`), like this:
 
     ```
@@ -250,6 +249,10 @@ Typescript
     ```
 
     and replace the `fscholsen/flist-ui` according to your name and repository name
+
+    - Make some changes to the src files, add and commit with git (optionally build them using `npm run build`); you can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
+    - (at project root again) `npx lerna publish`, specify github credentials and package new version after publish
+      Lerna will create a tag with the publish
 
 # References links
 
