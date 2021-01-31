@@ -78,36 +78,36 @@ Typescript
       resolve({ extensions }),
       commonjs(),
       babel({
-      babelHelpers: "bundled",
-      extensions,
-      include: ["src/**/*"],
-      exclude: ["./node_modules/*"],
+        babelHelpers: "bundled",
+        extensions,
+        include: ["src/**/*"],
+        exclude: ["./node_modules/*"],
       }),
     ],
   };
   export default config;
   ```
 
-- create a `.babelrc` in this directory
+  - create a `.babelrc` in this directory
 
-```
+  ```
 
-// .babelrc
-{
-  "presets": ["@babel/preset-env", "@babel/preset-typescript"],
-  "plugins": [
-    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
-    ["@babel/plugin-proposal-class-properties"]
-  ]
-}
+  // .babelrc
+  {
+    "presets": ["@babel/preset-env", "@babel/preset-typescript"],
+    "plugins": [
+      ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
+      ["@babel/plugin-proposal-class-properties"]
+    ]
+  }
 
-```
+  ```
 
 - add lit-element as dependency:
 
-- `cd flist-ui/packages/flist-button`
-- `npm install lit-element`
-- use lit-element as dependency of a package:
+  - `cd flist-ui/packages/flist-button`
+  - `npm install lit-element`
+  - use lit-element as dependency of a package:
 
   ```
   // src/flist-button.ts
@@ -132,22 +132,25 @@ Typescript
 - generate dist files of the package:
 
   - `npm run build` (inside of a package in `flist-ui/packages/`)
-  - `npm run build` (at project root)
+  - `npm run build` (at project root, this command is an "alias" of `npx lerna run build`, this command will `run npm run` build in each package under `/packages`)
 
 - add Prettier
+
   - cd `flist-ui`
   - `npm install --save-dev --save-exact prettier`
   - add a `.prettierignore`:
 
-```
+  ```
 
-# Ignore artifacts:
+  # Ignore artifacts:
 
-build
-dist
-node_modules
+  build
+  dist
+  node_modules
 
-```
+  ```
+
+- add ESLint
 
 # References links
 
@@ -172,3 +175,7 @@ node_modules
   - useful to emit types `.d.ts` files from src into the `packages/**/dist` folders
 
 - https://github.com/PolymerLabs/lit-element-starter-ts
+
+## Lerna
+
+- https://github.com/lerna/lerna#getting-started
