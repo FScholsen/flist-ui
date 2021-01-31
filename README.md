@@ -8,6 +8,16 @@ Lit Elements
 
 Typescript
 
+Babel
+
+Rollup
+
+Prettier
+
+ESLint
+
+GitHub NPM registry (GitHub Packages)
+
 # Steps
 
 - create an new git repo: `git init`
@@ -229,7 +239,7 @@ Typescript
 
     - create a new Personal Access Token in GitHub settings
     - Select scopes: `write:packages`, `delete:packages` and generate the token
-    - copy the token and paste it in a new file `.npmrc` at the root of the package (eg `packages/flist-button/.npmrc`), like this:
+    - copy the token and paste it in a new file `.npmrc` at the root of the project (ie `flist-ui/.npmrc`), like this:
 
     ```
     //npm.pkg.github.com/:\_authToken=TOKEN
@@ -240,6 +250,7 @@ Typescript
     Replace TOKEN by your personal access token (and `fscholsen` by your github owner name)
 
   - add this to your `package.json` in each packages:
+    Lerna will execute npm publish, using this config, in each package
 
     ```
     "repository": {
@@ -248,11 +259,11 @@ Typescript
     },
     ```
 
-    and replace the `fscholsen/flist-ui` according to your name and repository name
+    Replace the `fscholsen/flist-ui` according to your name and repository name.
 
     - Make some changes to the src files, add and commit with git (optionally build them using `npm run build`); you can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
     - (at project root again) `npx lerna publish`, specify github credentials and package new version after publish
-      Lerna will create a tag with the publish
+      Lerna will create a tag when executing publish
 
 # References links
 
