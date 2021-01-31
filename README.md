@@ -183,7 +183,12 @@ Typescript
 
   - add a `.prettierrc`, to override the default configuration of Prettier (if needed)
 
-- add ESLint
+- add ESLint:
+  - `npm install --D eslint`
+  - `npm install --D eslint-config-prettier`, to avoid conflicts between eslint and prettier
+  - `npm install --D typescript` (you must install it in order to lint with typescript-eslint)
+  - `npm install --D @typescript-eslint/parser`
+  - `npm install --D @typescript-eslint/eslint-plugin`
 
 # References links
 
