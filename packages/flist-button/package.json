@@ -36,5 +36,6 @@
   },
   "publishConfig": {
     "@fscholsen:registry": "https://npm.pkg.github.com/fscholsen"
-  }
+  },
+  "gitHead": "59d24dfd01e70671113874dbc02addac31dfa665"
 }

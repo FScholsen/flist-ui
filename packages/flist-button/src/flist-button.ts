@@ -19,6 +19,7 @@ export class FlistButton extends LitElement {
     }
     button {
       font-family: inherit;
+      font-size: 1.125rem;
       border: 1px solid #cecece;
       border-radius: 4px;
       outline: none;
