@@ -5,10 +5,15 @@
   "private": true,
   "scripts": {
     "build": "npx lerna run build",
+    "build:global": "npx lerna exec -- rollup -c=../../rollup.config.js",
     "watch": "npx lerna run watch",
-    "lint": "npm run lint:lit-analyzer && npx eslint './packages/**/src/**/*.ts'",
-    "lint:lit-analyzer": "npx lit-analyzer './packages/**/src/**/*.ts'",
-    "prettier": "npx prettier --write ."
+    "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
+    "lint:eslint": "npx lerna exec -- eslint './src/**/*.ts'",
+    "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src/**/*.ts'",
+    "prettier": "npx prettier --write .",
+    "clean": "npm run clean:packages",
+    "clean:packages": "npm run clean:dist && npx lerna clean",
+    "clean:dist": "npx lerna exec -- rm -rf ./dist"
   },
   "repository": {
     "type": "git",

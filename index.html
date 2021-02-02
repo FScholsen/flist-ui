@@ -8,6 +8,16 @@
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
+      .button {
+        color: red;
+        border: 2px solid red !important;
+      }
+      .active {
+      }
+      .large {
+        width: 4rem;
+        height: 4rem;
+      }
     </style>
   </head>
   <body>
@@ -16,6 +26,13 @@
       src="packages/flist-button/dist/flist-button.js"
     ></script>
     <h1>Buttons</h1>
-    <flist-button>Send</flist-button>
+    <flist-button class="button">Send</flist-button>
+    <flist-button class="button active large" rounded>Send</flist-button>
+    <flist-button class="button active large">Send</flist-button>
+    <flist-button>Cancel</flist-button>
+    <flist-button disabled>Delete</flist-button>
+    <script>
+      let buttons = document.getElementsByTagName("flist-button");
+    </script>
   </body>
 </html>

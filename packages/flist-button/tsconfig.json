@@ -5,7 +5,7 @@
     "moduleResolution": "node",
     "lib": ["es2017", "dom", "dom.iterable"],
     "declaration": true,
-    "emitDeclarationOnly": true, // only emit .d.ts file, let babel generate dist files
+    "noEmit": true,
     "isolatedModules": true,
     "strict": true,
     "noUnusedLocals": true,
@@ -16,13 +16,13 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true
-    // "plugins": [
-    //     {
-    //         "name": "ts-lit-plugin",
-    //         "strict": true
-    //     }
-    // ]
+    "experimentalDecorators": true,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true
+      }
+    ]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

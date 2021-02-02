@@ -4,7 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 
 const input = "src/flist-button.ts";
 const outputDir = "./dist/";
-const extensions = [".ts"];
+const extensions = [".js", ".ts"];
 
 export default {
   input,

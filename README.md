@@ -18,12 +18,71 @@ ESLint
 
 GitHub NPM registry (GitHub Packages)
 
+# Getting started
+
 # Steps
 
+These are the steps I followed from scratch to have everything running:
+
 - create an new git repo: `git init`
+- create an new npm package (and package.json): `npm init`
+
+```
+{
+  "name": "flist-ui",
+  "version": "0.0.0",
+  "description": "Flist UI Web components monorepo",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+```
+
+- add a `.gitignore`
+
+```
+# compiled output
+**/dist
+/tmp
+
+# IDEs and editors
+.idea
+.project
+nbproject/
+.vscode/*
+
+# Logs files
+*.log
+
+# Dependency directories
+node_modules/
+
+# System Files
+.DS_Store
+Thumbs.db
+```
+
+- install lerna: `npm install -D lerna`
+  It will add lerna as dev dependency
 - create a new lerna monorepo: `npx lerna init`
-- run `npm install` to install lerna as dev dependency
+  It will create a new `lerna.json` where you can add [options](https://github.com/lerna/lerna#lernajson):
+
+```
+{
+  "packages": [
+    "packages/*"
+  ],
+  "version": "0.0.0"
+}
+
+```
+
 - create a new package `npx lerna create flist-button`
+<!-- TODO Remove typescript from packages, move it to global install -->
 - add typescript to the package
 
   - `cd flist-ui/packages/flist-button`
@@ -264,6 +323,10 @@ GitHub NPM registry (GitHub Packages)
     - Make some changes to the src files, add and commit with git (optionally build them using `npm run build`); you can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
     - (at project root again) `npx lerna publish`, specify github credentials and package new version after publish
       Lerna will create a tag when executing publish
+
+- Add precommit hooks with `husky` and `lint-staged`
+
+- Add a `.npmignore`
 
 # References links
 
