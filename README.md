@@ -26,69 +26,85 @@ GitHub NPM registry (GitHub Packages)
 
 <!-- TODO change this ('try it by cloning into another dir)-->
 
-Get the source code:
+## Get the source code
 
 ```
-git clone
+git clone https://github.com/FScholsen/flist-ui.git
 cd flist-ui
 ```
 
-Install the dependencies:
+## Install the dependencies and bootstrap
 
 ```
 npm install
 ```
 
-After running this command, npm will automatically run `npm prepare`, which will install dependencies in each package as well.
+After running this command, npm will automatically run `npm prepare`, which will install dependencies in each package as well as building the sources into each package's `dist/`.
+
+## Authenticate on GitHub Packages (NPM)
+
+Generate a personal access token on GitHub, save it.
+
+Create the file `.npmrc` in your user home directory (or append to the existing one if it exists), `~/.npmrc`:
+
+```
+//npm.pkg.github.com/:\_authToken=TOKEN
+```
+
+Replace TOKEN with your personal access token (**without** single/double quotes).
 
 # Steps to reproduce
 
 These are the steps I followed from scratch to have everything running:
 
-- create an new git repo: `git init`
-- create an new npm package (and package.json): `npm init`
+- create a new git repo: `git init`
+- create a new npm package: `npm init`
 
-```
-{
-  "name": "flist-ui",
-  "version": "0.0.0",
-  "description": "Flist UI Web components monorepo",
-  "main": "index.js",
-  "private": true,
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
-}
-```
+  This will generate a `package.json`:
 
-- add a `.gitignore`
+  ```
+  {
+    "name": "flist-ui",
+    "version": "0.0.0",
+    "description": "Flist UI Web components monorepo",
+    "main": "index.js",
+    "private": true,
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+  }
+  ```
 
-```
-# compiled output
-**/dist
-/tmp
+- add a `.gitignore`:
 
-# IDEs and editors
-.idea
-.project
-nbproject/
-.vscode/*
+  ```
+  # compiled output
+  **/dist
+  /tmp
 
-# Logs files
-*.log
+  # IDEs and editors
+  .idea
+  .project
+  nbproject/
+  .vscode/*
 
-# Dependency directories
-node_modules/
+  # Logs files
+  *.log
 
-# System Files
-.DS_Store
-Thumbs.db
-```
+  # Dependency directories
+  node_modules/
+
+  # System Files
+  .DS_Store
+  Thumbs.db
+  ```
 
 - install lerna: `npm install -D lerna`
-  It will add lerna as dev dependency
+
+  It will add lerna as dev dependency.
+
 - create a new lerna monorepo: `npx lerna init`
 
   It will create a new `lerna.json` where you can add [options](https://github.com/lerna/lerna#lernajson) and add a `packages/` directory:

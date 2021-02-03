@@ -13,9 +13,6 @@ export class FlistInput extends LitElement {
   @property()
   name = "default";
 
-  @property()
-  toto: boolean = "false";
-
   static styles: CSSResult = css`
     :host {
     }
