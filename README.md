@@ -18,9 +18,30 @@ ESLint
 
 GitHub NPM registry (GitHub Packages)
 
+# About
+
+<!-- TODO -->
+
 # Getting started
 
-# Steps
+<!-- TODO change this ('try it by cloning into another dir)-->
+
+Get the source code:
+
+```
+git clone
+cd flist-ui
+```
+
+Install the dependencies:
+
+```
+npm install
+```
+
+After running this command, npm will automatically run `npm prepare`, which will install dependencies in each package as well.
+
+# Steps to reproduce
 
 These are the steps I followed from scratch to have everything running:
 
@@ -69,20 +90,131 @@ Thumbs.db
 - install lerna: `npm install -D lerna`
   It will add lerna as dev dependency
 - create a new lerna monorepo: `npx lerna init`
-  It will create a new `lerna.json` where you can add [options](https://github.com/lerna/lerna#lernajson):
 
-```
-{
-  "packages": [
-    "packages/*"
-  ],
-  "version": "0.0.0"
-}
+  It will create a new `lerna.json` where you can add [options](https://github.com/lerna/lerna#lernajson) and add a `packages/` directory:
 
-```
+  ```
+  {
+    "packages": [
+      "packages/*"
+    ],
+    "version": "0.0.0"
+  }
+  ```
+
+  For example, Lerna can be configured to manage packages version independently or globally (on the example above it is global).
+
+<!-- CREATE NEW COMPONENT -->
 
 - create a new package `npx lerna create flist-button`
-<!-- TODO Remove typescript from packages, move it to global install -->
+  It will create directories `lib/` and `__tests__/` (which you can remove, or rename).
+- add `lit-element` as dependency of the package (inside a per-package `package.json`):
+
+  - Run `cd ./packages/flist-button`
+  - Run `npm install lit-element`
+  - Use lit-element as dependency of the package:
+
+    Create a new `src/flist-button.ts`
+
+    ```
+    // create the file src/flist-button.ts
+    import { LitElement, html, customElement, property } from "lit-element";
+    @customElement("flist-button")
+    export class FlistButton extends LitElement {
+      @property()
+      name = "Button";
+      ...
+      render() {
+        return html`<button></button>`;
+      }
+    }
+    declare global {
+      interface HTMLElementTagNameMap {
+        "flist-button": FlistButton;
+      }
+    }
+    ```
+
+<!-- BUILD PROCESS -->
+<!-- The build process uses Babel and Rollup -->
+
+- install rollup and babel to the main package (to `flist-ui/package.json`):
+
+  - Run `cd flist-ui` (make sure you are at the project root)
+  - Run `npm install -D rollup @rollup/plugin-node-resolve @rollup/plugin-commonjs`
+
+    Details:
+
+    - `rollup`: allows to bundle source files to one (bigger) distribution-ready bundled file
+    - `@rollup/node-resolve`: allows to locate and bundle third-party dependencies in node_modules
+    - `@rollup/commonjs`: convert CommonJS modules to ES6
+
+  - Run `npm install -D @babel/core @rollup/plugin-babel @babel/preset-env @babel/preset-typescript @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties`
+
+    Details:
+
+    - `@babel/core`: the core babel library, required for @rollup/plugin-babel
+    - `@rollup/plugin-babel`: allows rollup to use babel
+    - `@babel/preset-env`: allows you to use the latest JavaScript features (no browser polyfills needed)
+    - `@babel/preset-typescript`: allows babel to transpile Typescript to Javascript
+    - `@babel/plugin-proposal-decorators`: allows to use proposal (or experimental) decorators
+
+  - create a `rollup.config.js` in the project root directory
+
+    ```
+    // rollup.config.js
+    import { babel } from "@rollup/plugin-babel";
+    import resolve from "@rollup/plugin-node-resolve";
+    import commonjs from "@rollup/plugin-commonjs";
+    import path from "path";
+
+    // The name of the package must match the directory name
+    const input = `./src/${path.basename(__dirname)}.ts`;
+    const outputDir = "./dist/";
+    const extensions = [".js", ".ts"];
+
+    export default {
+      input,
+      output: {
+        dir: outputDir,
+        format: "esm",
+        sourcemap: true,
+      },
+      plugins: [
+        resolve({ extensions }),
+        commonjs({ include: /node_modules/ }),
+        babel({
+          babelHelpers: "bundled",
+          extensions,
+          include: ["src/**/*"],
+          exclude: ["./node_modules/*"],
+          presets: ["@babel/preset-env", "@babel/preset-typescript"],
+          plugins: [
+            ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true }],
+            ["@babel/plugin-proposal-class-properties"],
+          ],
+        }),
+      ],
+    };
+    ```
+
+<!-- Not sure if needed but babel is installed -->
+
+- create a `babel.config.js` in the project root directory
+
+```
+// .babel.config.js
+export default {
+  "presets": ["@babel/preset-env", "@babel/preset-typescript"],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
+    ["@babel/plugin-proposal-class-properties"]
+  ]
+}
+```
+
+  <!-- TODO Remove typescript from packages, move it to global install -->
+
 - add typescript to the package
 
   - `cd flist-ui/packages/flist-button`
@@ -167,21 +299,6 @@ Thumbs.db
       ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
       ["@babel/plugin-proposal-class-properties"]
     ]
-  }
-  ```
-
-- add lit-element as dependency:
-
-  - `cd flist-ui/packages/flist-button`
-  - `npm install lit-element`
-  - use lit-element as dependency of a package:
-
-  ```
-  // src/flist-button.ts
-  import { LitElement, html, customElement, property } from "lit-element";
-  @customElement("flist-button")
-  export class FlistButton extends LitElement {
-    ...
   }
   ```
 
@@ -279,6 +396,21 @@ Thumbs.db
   };
   ```
 
+  - install ts-lit-plugin `npm install -D ts-lit-plugin`
+
+    It will add type checking to lit-html (dependency of lit-element)
+
+    Add it to the project root `tsconfig.json`:
+
+    ```
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true
+      }
+    ]
+    ```
+
   - install lit-analyzer `npm install -D lit-analyzer`
 
   - add this to `package.json` scripts:
@@ -327,6 +459,98 @@ Thumbs.db
 - Add precommit hooks with `husky` and `lint-staged`
 
 - Add a `.npmignore`
+
+# Configuration
+
+## Extend build configuration
+
+You can configure how each package will be built using `npm run build` (which uses rollup).
+
+The default configuration of each package (`./packages/*/rollup.config.js`) extends the base config file at project root (`flist-ui/rollup.config.js`).
+
+You can override the per-package configuration (i.e. `./packages/*/rollup.config.js`) by adding properties to the exported local configuration.
+
+### Extend tsconfig
+
+## Extend publish configuration
+
+You can create, in each package, a `.npmignore` file.
+
+This file should contain file or directories that you don't want to publish (to NPM or GitHub NPM Registry).
+
+```
+// ./packages/flist-button/.npmignore
+node_modules
+src
+tests
+.babelrc
+rollup.config.js
+tsconfig.json
+tsconfig.types.json
+```
+
+# Monorepo scripts
+
+## bootstrap
+
+```bash
+npm run bootstrap
+```
+
+This command will clean the `dist` and `node_modules` folders in every package (inside `packages/`).
+
+It will then run `npx lerna bootstrap` to install and link each package's dependencies. See: [lerna bootstrap](https://github.com/lerna/lerna/tree/main/commands/bootstrap#readme).
+
+Finally, it will generate the `dist` directory in each package with the build files.
+
+## lint
+
+```bash
+npm run lint
+```
+
+This command will run `lit-analyzer` and `eslint` in each package.
+
+## build
+
+```bash
+npm run build
+```
+
+This command will first clean the `dist/` folder in each package.
+
+Secondly, it will generate dist files (`./dist/*.js`) from the sources files (`./src/*.ts`).
+
+**For more details**:
+
+_It will execute `rollup -c=./rollup.config.js` in each package (with `npx lerna exec`). It uses a per-package rollup config file, relative to the package folder._
+
+_This is why one `rollup.config.js` file has to be present at the package root. This per-package config can be used to override the default configuration, located at the monorepo root._
+
+## publish
+
+```bash
+npm run publish
+```
+
+This command will run `npx lerna publish`.
+
+Each package will be published at the specified `"publishConfig"` from their respective `package.json`.
+
+## clean
+
+```bash
+npm run clean
+```
+
+This command will remove the `dist/` and `node_modules/` folders in each package (inside `packages/`).
+
+# Suggestions:
+
+## VSCode
+
+- lit-plugin on VSCode `runem.lit-plugin`
+- Prettier Code formatter `esbenp.prettier-vscode` : installed and configured to use the working project config (and turn on `Format on save` setting in VSCode)
 
 # References links
 

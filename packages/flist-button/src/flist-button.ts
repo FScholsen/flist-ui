@@ -105,11 +105,11 @@ export class FlistButton extends LitElement {
   // }
 
   focusHandler(): void {
-    this.button?.focus();
+    return this.button?.focus();
   }
 
   clickHandler(): void {
-    this.button?.click();
+    return this.button?.click();
   }
 
   buttonClickHandler(event: Event): void {
@@ -127,7 +127,7 @@ export class FlistButton extends LitElement {
     return html`<button
       .type="${this.type}"
       ?disabled="${this.disabled}"
-      class="${ifDefined(!!this.class ? this.class : undefined)}"
+      class="${ifDefined(this.class ? this.class : undefined)}"
       @click="${this.buttonClickHandler}"
       @focus="${this.buttonFocusHandler}"
     >

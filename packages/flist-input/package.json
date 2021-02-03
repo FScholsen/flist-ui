@@ -3,13 +3,16 @@
   "version": "0.0.4-alpha.0",
   "description": "Flist UI Input component",
   "author": "fscholsen <fscholsen@gmail.com>",
-  "homepage": "https://github.com/FScholsen/flist-ui#readme",
+  "homepage": "https://github.com/FScholsen/flist-ui/tree/main/packages/flist-input#flist-input",
   "license": "ISC",
   "main": "dist/flist-input.js",
   "module": "dist/flist-input.js",
   "types": "dist/flist-input.d.ts",
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "lit-element": "^2.4.0"
   },
   "repository": {
     "type": "git",
@@ -20,8 +23,5 @@
   },
   "bugs": {
     "url": "https://github.com/fscholsen/flist-ui/issues"
-  },
-  "dependencies": {
-    "lit-element": "^2.4.0"
   }
 }

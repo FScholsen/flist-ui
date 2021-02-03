@@ -4,16 +4,22 @@
   "description": "Flist UI Web components monorepo",
   "private": true,
   "scripts": {
-    "build": "npx lerna run build",
-    "build:global": "npx lerna exec -- rollup -c=../../rollup.config.js",
-    "watch": "npx lerna run watch",
+    "bootstrap": "npm run clean:packages && npx lerna bootstrap && npm run build:dist && npm run build:types",
+    "prebuild": "npm run clean:dist",
+    "build": "npm run build:dist && npm run build:types",
+    "build:dist": "npx lerna exec -- rollup -c=./rollup.config.js",
+    "build:types": "npx lerna exec -- tsc -p ./tsconfig.types.json",
+    "check:types": "npx lerna exec -- tsc -p ./tsconfig.json",
+    "watch": "npx lerna exec --loglevel verbose -- rollup -c=./rollup.config.js -w",
+    "prepare": "npm run bootstrap",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "npx lerna exec -- eslint './src/**/*.ts'",
     "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src/**/*.ts'",
     "prettier": "npx prettier --write .",
     "clean": "npm run clean:packages",
     "clean:packages": "npm run clean:dist && npx lerna clean",
-    "clean:dist": "npx lerna exec -- rm -rf ./dist"
+    "clean:dist": "npx lerna exec -- rm -rf ./dist",
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,6 +28,14 @@
   "author": "fscholsen <fscholsen@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-decorators": "^7.12.12",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-typescript": "^7.12.7",
+    "@rollup/plugin-babel": "^5.2.3",
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.1.1",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
     "eslint": "^7.19.0",
@@ -29,6 +43,8 @@
     "lerna": "^3.22.1",
     "lit-analyzer": "^1.2.1",
     "prettier": "2.2.1",
+    "rollup": "^2.38.4",
+    "ts-lit-plugin": "^1.2.1",
     "typescript": "^4.1.3"
   },
   "dependencies": {}

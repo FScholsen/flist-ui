@@ -25,12 +25,18 @@
       type="module"
       src="packages/flist-button/dist/flist-button.js"
     ></script>
+    <script
+      type="module"
+      src="packages/flist-input/dist/flist-input.js"
+    ></script>
     <h1>Buttons</h1>
     <flist-button class="button">Send</flist-button>
     <flist-button class="button active large" rounded>Send</flist-button>
     <flist-button class="button active large">Send</flist-button>
     <flist-button>Cancel</flist-button>
     <flist-button disabled>Delete</flist-button>
+    <flist-input name="name"></flist-input>
+    <flist-input name="name" />
     <script>
       let buttons = document.getElementsByTagName("flist-button");
     </script>

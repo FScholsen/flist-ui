@@ -1,11 +1,12 @@
 import { babel } from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import path from "path";
 
-const input = "./src/flist-button.ts";
+// The name of the package must match the directory name
+const input = `./src/${path.basename(__dirname)}.ts`;
 const outputDir = "./dist/";
 const extensions = [".js", ".ts"];
-console.log("running global");
 
 export default {
   input,
@@ -22,6 +23,7 @@ export default {
       extensions,
       include: ["src/**/*"],
       exclude: ["./node_modules/*"],
+      presets: ["@babel/preset-env", "@babel/preset-typescript"],
     }),
   ],
 };
