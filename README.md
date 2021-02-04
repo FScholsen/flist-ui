@@ -201,10 +201,10 @@ These are the steps I followed from scratch to have everything running:
     ```
     {
       "compilerOptions": {
-        "target": "es2017",
-        "module": "es2015",
+        "target": "es2020",
+        "module": "es2020",
         "moduleResolution": "node",
-        "lib": ["es2017", "dom", "dom.iterable"],
+        "lib": ["es2020", "dom", "dom.iterable"],
         "declaration": true,
         "noEmit": true,
         "isolatedModules": true,
@@ -445,13 +445,14 @@ These are the steps I followed from scratch to have everything running:
     ```
     "scripts": {
       ...
-      "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
-      "lint:eslint": "npx lerna exec -- eslint './src/**/*.ts'",
-      "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src/**/*.ts'",
+      "lint": "npm run check:types; npm run lint:lit-analyzer && npm run lint:eslint",
+      "lint:eslint": "npx lerna exec -- eslint './src' -c '../../.eslintrc.js'",
+      "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src'",
       "prettier": "npx lerna exec -- npx prettier --write . --ignore-path ../../.prettierignore",
       ...
     }
     ```
+
     You can configure ESLint or Prettier to use per-package config file
 
 - Publish package to npm using `lerna publish` (or `npm publish` inside an individual package)
