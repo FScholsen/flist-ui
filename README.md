@@ -59,8 +59,8 @@ TODO
 
 These are the steps I followed from scratch to have everything running:
 
-- create a new git repo: `git init`
-- create a new npm package: `npm init`
+- Create a new git repo: `git init`
+- Create a new npm package: `npm init`
 
   This will generate a `package.json`:
 
@@ -79,7 +79,9 @@ These are the steps I followed from scratch to have everything running:
   }
   ```
 
-- add a `.gitignore`:
+  The line `"private": true,` was added to avoid publishing it to NPM (instead, publish `/packages/*` with lerna).
+
+- Add a `.gitignore`:
 
   ```
   # compiled output
@@ -103,11 +105,11 @@ These are the steps I followed from scratch to have everything running:
   Thumbs.db
   ```
 
-- install lerna: `npm install -D lerna`
+- Install lerna: `npm install -D lerna`
 
   It will add lerna as dev dependency.
 
-- create a new lerna monorepo: `npx lerna init`
+- Create a new lerna monorepo: `npx lerna init`
 
   It will create a new `lerna.json` where you can add [options](https://github.com/lerna/lerna#lernajson) and add a `packages/` directory:
 
@@ -120,45 +122,15 @@ These are the steps I followed from scratch to have everything running:
   }
   ```
 
-  For example, Lerna can be configured to manage packages version independently or globally (on the example above it is global).
+  For example, Lerna can be configured to manage packages versions independently or globally (on the example above it is global).
 
-<!-- CREATE NEW COMPONENT -->
+<!-- SET UP THE BUILD PROCESS -->
+<!-- The build process uses Babel and Rollup installed globally to the project -->
 
-- create a new package `npx lerna create flist-button`
-  It will create directories `lib/` and `__tests__/` (which you can remove, or rename).
-- add `lit-element` as dependency of the package (inside a per-package `package.json`):
+- Install rollup and babel to the main package (to `flist-ui/package.json`):
 
-  - Run `cd ./packages/flist-button`
-  - Run `npm install lit-element`
-  - Use lit-element as dependency of the package:
-
-    Create a new `src/flist-button.ts`
-
-    ```
-    // create the file src/flist-button.ts
-    import { LitElement, html, customElement, property } from "lit-element";
-    @customElement("flist-button")
-    export class FlistButton extends LitElement {
-      @property()
-      name = "Button";
-      ...
-      render() {
-        return html`<button></button>`;
-      }
-    }
-    declare global {
-      interface HTMLElementTagNameMap {
-        "flist-button": FlistButton;
-      }
-    }
-    ```
-
-<!-- BUILD PROCESS -->
-<!-- The build process uses Babel and Rollup -->
-
-- install rollup and babel to the main package (to `flist-ui/package.json`):
-
-  - Run `cd flist-ui` (make sure you are at the project root)
+  - Run `cd ../..`
+  - Make sure you are at the project root: run `pwd`, it should output `flist-ui` full path
   - Run `npm install -D rollup @rollup/plugin-node-resolve @rollup/plugin-commonjs`
 
     Details:
@@ -177,7 +149,7 @@ These are the steps I followed from scratch to have everything running:
     - `@babel/preset-typescript`: allows babel to transpile Typescript to Javascript
     - `@babel/plugin-proposal-decorators`: allows to use proposal (or experimental) decorators
 
-  - create a `rollup.config.js` in the project root directory
+  - Create a `rollup.config.js` in the project root directory
 
     ```
     // rollup.config.js
@@ -216,162 +188,203 @@ These are the steps I followed from scratch to have everything running:
     };
     ```
 
-<!-- Not sure if needed but babel is installed -->
+- Add typescript to the project
 
-- create a `babel.config.js` in the project root directory
+  - (Make sure you are at project root directory `flist-ui`)
+  - Install Typescript: `npm install -D typescript`
+  - Install ts-lit-plugin: `npm install -D ts-lit-plugin`
 
-```
-// .babel.config.js
-export default {
-  "presets": ["@babel/preset-env", "@babel/preset-typescript"],
-  "plugins": [
-    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
-    ["@babel/plugin-proposal-class-properties"]
-  ]
-}
-```
+    It will add type checking to lit-html (dependency of lit-element)
 
-  <!-- TODO Remove typescript from packages, move it to global install -->
+  - Create a `tsconfig.json` in this directory (`flist-ui`):
 
-- add typescript to the package
+    ```
+    {
+      "compilerOptions": {
+        "target": "es2017",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "lib": ["es2017", "dom", "dom.iterable"],
+        "declaration": true,
+        "noEmit": true,
+        "isolatedModules": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "plugins": [
+          {
+            "name": "ts-lit-plugin",
+            "strict": true
+          }
+        ]
+      },
+      "exclude": ["node_modules"]
+    }
+    ```
 
-  - `cd flist-ui/packages/flist-button`
-  - `npm install -D typescript`
-  - create a `tsconfig.json` in this directory (`flist-ui/packages/flist-button`):
+  - Create a `tsconfig.types.json` in this directory (`flist-ui`):
 
-  ```
-  {
-    "compilerOptions": {
-      "target": "es2017",
-      "module": "es2015",
-      "moduleResolution": "node",
-      "lib": ["es2017", "dom", "dom.iterable"],
-      "declaration": true,
-      "emitDeclarationOnly": true, // only emit .d.ts file, let babel generate dist files
-      "isolatedModules": true,
-      "strict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noImplicitReturns": true,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "noFallthroughCasesInSwitch": true,
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "experimentalDecorators": true
-      // "plugins": [
-      //     {
-      //         "name": "ts-lit-plugin",
-      //         "strict": true
-      //     }
-      // ]
-    },
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules"]
-  }
-  ```
+    ```
+    {
+      "extends": "./tsconfig.json",
+      "compilerOptions": {
+        "declaration": true,
+        "declarationMap": true,
+        "isolatedModules": false,
+        "noEmit": false,
+        "allowJs": false,
+        "emitDeclarationOnly": true
+      },
+      "exclude": ["tests"]
+    }
+    ```
 
-- add rollup and babel to the package:
+    It will be used to build `.d.ts` files into `packages/*/dist/`.
 
-  - `cd flist-ui/packages/flist-button`
-  - `npm install -D rollup @rollup/plugin-node-resolve`
-  - `npm install -D @babel/core @rollup/plugin-babel @babel/preset-env @babel/preset-typescript @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties`
-  - create a `rollup.config.js` in this directory
-
-  ```
-  // rollup.config.js
-  import { babel } from "@rollup/plugin-babel";
-  import resolve from "@rollup/plugin-node-resolve";
-  import commonjs from "@rollup/plugin-commonjs";
-  const input = "src/flist-button.ts";
-  const outputDir = "./dist/";
-  const extensions = [".ts"];
-  const config = {
-    input: input,
-    output: {
-      dir: outputDir,
-      format: "esm",
-      sourcemap: true,
-    },
-    plugins: [
-      resolve({ extensions }),
-      commonjs(),
-      babel({
-        babelHelpers: "bundled",
-        extensions,
-        include: ["src/**/*"],
-        exclude: ["./node_modules/*"],
-      }),
-    ],
-  };
-  export default config;
-  ```
-
-  - create a `.babelrc` in this directory
-
-  ```
-  // .babelrc
-  {
-    "presets": ["@babel/preset-env", "@babel/preset-typescript"],
-    "plugins": [
-      ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
-      ["@babel/plugin-proposal-class-properties"]
-    ]
-  }
-  ```
-
-- add scripts to the `package.json`:
-
-```
-"scripts": {
-  "build": "rm -rf ./dist && npx rollup --config",
-  "watch": "rm -rf ./dist && npx rollup --config --watch"
-}
-```
-
-- generate dist files of the package:  
-  This will generate `.js` files in `./dist` from the `./src` folder :
-
-  - `npm run build` (inside of a package in `flist-ui/packages/`)
-  - `npm run build` (at project root, this command is an "alias" of `npx lerna run build`, this command will `run npm run` build in each package under `/packages`)
-
-- generate type declaration from `.ts` files:
-
-  - add a new `tsconfig.types.json`, to transpile source files and emit `.d.ts` files
-
-  ```
-  // ./packages/flist-button/tsconfig.types.json
-  {
-    "extends": "./tsconfig",
-    "compilerOptions": {
-      "outDir": "dist",
-      "declaration": true,
-      "declarationMap": true,
-      "isolatedModules": false,
-      "noEmit": false,
-      "allowJs": false,
-      "emitDeclarationOnly": true
-    },
-    "exclude": ["tests/**/*.ts"]
-  }
-  ```
-
-  - add this to the npm scripts in `package.json`:
+- Add scripts to the `flist-ui/package.json`, known as `monorepo-scripts`:
 
   ```
   "scripts": {
-    "build": "rm -rf ./dist && npm run build:types && npx rollup --config",
-    "build:types": "npx tsc --project tsconfig.types.json"
-  }
+    "bootstrap": "npx lerna bootstrap && npm run build:dist && npm run build:types",
+    "prebuild": "npm run clean:dist",
+    "build": "npm run build:dist && npm run build:types",
+    "build:dist": "npx lerna exec -- rollup -c=./rollup.config.js",
+    "build:types": "npx lerna exec -- tsc -p ./tsconfig.types.json",
+    "check:types": "npx lerna exec -- tsc -p ./tsconfig.json",
+    "watch": "npx lerna exec -- rollup -c=./rollup.config.js -w",
+    "prepare": "npm run bootstrap",
+    "clean": "npm run clean:packages",
+    "clean:packages": "npm run clean:dist && npx lerna clean",
+    "clean:dist": "npx lerna exec -- rm -rf ./dist",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
   ```
 
-  - `npm run build` will now generate type declarations files (in `./dist/*.d.ts`)
+<!-- CREATE A NEW COMPONENT -->
 
-- add Prettier
+- Create a new package `npx lerna create flist-button`
+  It will create directories `lib/` and `__tests__/` (which you can remove, or rename).
+- Add `lit-element` as dependency of the package (inside a per-package `package.json`):
+
+  - Run `cd ./packages/flist-button`
+  - Run `npm install lit-element`
+  - Use lit-element as dependency of the package:
+
+    Create a new `src/flist-button.ts`
+
+    ```
+    // create the file src/flist-button.ts
+    import { LitElement, html, customElement, property } from "lit-element";
+    @customElement("flist-button")
+    export class FlistButton extends LitElement {
+      @property()
+      name = "Button";
+      ...
+      render() {
+        return html`<button></button>`;
+      }
+    }
+    declare global {
+      interface HTMLElementTagNameMap {
+        "flist-button": FlistButton;
+      }
+    }
+    ```
+
+  - Add a per-package `rollup.config.js`:
+    Copy this into `/packages/flist-button/rollup.config.js`
+
+    ```
+    import rollupBaseConfig from "../../rollup.config";
+    export default {
+      ...rollupBaseConfig,
+    };
+    ```
+
+    The default behaviour is to extend the config at project root, but you can create your own if you want (by removing the imported module from the exported object config).
+
+    This configuration will allow to build each package independently if it's needed.
+
+  - Add a per-package `tsconfig.json`
+
+    ```
+    {
+      "extends": "../../tsconfig.json",
+      "include": ["./src"]
+    }
+    ```
+
+    It will allow to type check each package independently.
+
+  - Add a per-package `tsconfig.types.json`
+
+    ```
+    {
+      "extends": "../../tsconfig.types.json",
+      "compilerOptions": {
+        "outDir": "./dist"
+      },
+      "include": ["./src"]
+    }
+    ```
+
+    It will allow to transpile source files and emit `.d.ts` files.
+
+  - Optionally, you can create a per-package `.babelrc`
+
+    ```
+    // .babelrc
+    {
+      "presets": ["@babel/preset-env", "@babel/preset-typescript"],
+      "plugins": [
+        ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
+        ["@babel/plugin-proposal-class-properties"]
+      ]
+    }
+    ```
+
+    It will extend the existing configuration in `rollup.config.js`.
+
+    <!-- Use monorepo commands -->
+
+- Use monorepo command to generate dist files of the package:
+
+  This will generate `.js` files (from `./src` to `./dist` folder):
+
+  Run this command at project root (`cd ../..` and check for `flist-ui`)
+
+  ```
+  npm run build
+  ```
+
+  First, it will execute `rollup` on each packages, using the `rollup.config.js` per-package configuration.
+  This will create per-package `./dist/*.js` dist files.
+
+  Then, it will then execute `tsc` on each packages, using the `tsconfig.json` per-package configuration.
+  This will create per-package `./dist/*.d.ts` type declaration files.
+
+  Note:
+
+  As an alternative, you could use `npx lerna run build`, which will run `npm run build` in each package under `/packages`.  
+  To use this solution, you have to add a `"build"` script in each `package.json` file of packages you want to build.  
+  You have to add build dependencies (e.g. Rollup, Babel, snowpack, ...) to each package and add a config for each of them as well.  
+  This way, you can have a complete different way of building for each component.
+
+<!-- Add Prettier and ESLint -->
+
+- Add Prettier to the monorepo
 
   - cd `flist-ui`
-  - `npm install --save-dev --save-exact prettier`
-  - add a `.prettierignore`:
+  - Run `npm install --save-dev --save-exact prettier`
+  - Add a `.prettierignore`:
 
   ```
   # Ignore artifacts:
@@ -383,11 +396,11 @@ export default {
 
   - add a `.prettierrc`, to override the default configuration of Prettier (if needed)
 
-- add ESLint (for the monorepo):
+- Add ESLint to the monorepo:
 
   - `npm install --D eslint`
   - `npm install --D eslint-config-prettier`, to avoid conflicts between eslint and prettier
-  - `npm install --D typescript` (you must install it in order to lint with typescript-eslint)
+  - (`npm install --D typescript` (you must install it in order to lint with typescript-eslint, but it should already be installed unless you skip it))
   - `npm install --D @typescript-eslint/parser`
   - `npm install --D @typescript-eslint/eslint-plugin`
   - `npx eslint --init` to generate a default config file, or use this one:
@@ -413,21 +426,6 @@ export default {
     rules: {},
   };
   ```
-
-  - install ts-lit-plugin `npm install -D ts-lit-plugin`
-
-    It will add type checking to lit-html (dependency of lit-element)
-
-    Add it to the project root `tsconfig.json`:
-
-    ```
-    "plugins": [
-      {
-        "name": "ts-lit-plugin",
-        "strict": true
-      }
-    ]
-    ```
 
   - install lit-analyzer `npm install -D lit-analyzer`
 
