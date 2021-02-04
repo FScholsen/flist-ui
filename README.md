@@ -386,59 +386,73 @@ These are the steps I followed from scratch to have everything running:
   - Run `npm install --save-dev --save-exact prettier`
   - Add a `.prettierignore`:
 
-  ```
-  # Ignore artifacts:
+    ```
+    # Ignore artifacts:
+    package-lock.json
+    dist
+    node_modules
+    ```
 
-  build
-  dist
-  node_modules
-  ```
-
-  - add a `.prettierrc`, to override the default configuration of Prettier (if needed)
+  - Add a `.prettierrc`, to override the default configuration of Prettier if needed
 
 - Add ESLint to the monorepo:
 
-  - `npm install --D eslint`
-  - `npm install --D eslint-config-prettier`, to avoid conflicts between eslint and prettier
+  - Run `npm install --D eslint`
+  - Run `npm install --D eslint-config-prettier`, to avoid conflicts between eslint and prettier
   - (`npm install --D typescript` (you must install it in order to lint with typescript-eslint, but it should already be installed unless you skip it))
-  - `npm install --D @typescript-eslint/parser`
-  - `npm install --D @typescript-eslint/eslint-plugin`
-  - `npx eslint --init` to generate a default config file, or use this one:
+  - Run `npm install --D @typescript-eslint/parser`
+  - Run `npm install --D @typescript-eslint/eslint-plugin`
+  - Run `npx eslint --init` to generate a default config file, or use this one `.eslintrc.js`:
 
-  ```
-  module.exports = {
-    env: {
-      browser: true,
-      es2021: true,
-    },
-    extends: [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "prettier",
-      "prettier/@typescript-eslint",
-    ],
-    parser: "@typescript-eslint/parser",
-    parserOptions: {
-      ecmaVersion: 12,
-      sourceType: "module",
-    },
-    plugins: ["@typescript-eslint"],
-    rules: {},
-  };
-  ```
+    ```
+    module.exports = {
+      env: {
+        browser: true,
+        es2021: true,
+      },
+      extends: [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "prettier/@typescript-eslint",
+      ],
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        ecmaVersion: 12,
+        sourceType: "module",
+      },
+      plugins: ["@typescript-eslint"],
+      rules: {},
+    };
+    ```
 
-  - install lit-analyzer `npm install -D lit-analyzer`
+    Note: the prettier and prettier/@typescript-eslint in extends attribute, added to avoid conflict between linter and prettier.
 
-  - add this to `package.json` scripts:
+  - Install lit-analyzer `npm install -D lit-analyzer`
 
-  ```
-  "scripts": {
-    ...
-    "lint": "npm run lint:lit-analyzer && npx eslint './packages/**/src/**/*.ts'",
-    "lint:lit-analyzer": "npx lit-analyzer './packages/**/src/**/*.ts'"
-    ...
-  }
-  ```
+    It will allows to add type checks bindings in lit-html templates.
+
+  - Add a `.eslintignore`:
+
+    ```
+    **/dist
+    **/build
+    **/node_modules
+    ```
+
+  - Add this to `package.json` scripts:
+
+    ```
+    "scripts": {
+      ...
+      "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
+      "lint:eslint": "npx lerna exec -- eslint './src/**/*.ts'",
+      "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src/**/*.ts'",
+      "prettier": "npx lerna exec -- npx prettier --write . --ignore-path ../../.prettierignore",
+      ...
+    }
+    ```
+    You can configure ESLint or Prettier to use per-package config file
 
 - Publish package to npm using `lerna publish` (or `npm publish` inside an individual package)
 
