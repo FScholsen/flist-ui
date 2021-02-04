@@ -4,7 +4,7 @@ Reusable Web Components
 
 Lerna monorepo
 
-Lit Elements
+LitElement
 
 Typescript
 
@@ -20,11 +20,9 @@ GitHub NPM registry (GitHub Packages)
 
 # About
 
-<!-- TODO -->
+TODO
 
 # Getting started
-
-<!-- TODO change this ('try it by cloning into another dir)-->
 
 ## Get the source code
 
@@ -43,7 +41,7 @@ After running this command, npm will automatically run `npm prepare`, which will
 
 ## Authenticate on GitHub Packages (NPM)
 
-Generate a personal access token on GitHub, save it.
+Generate a personal access token on GitHub, save it for later use.
 
 Create the file `.npmrc` in your user home directory (or append to the existing one if it exists), `~/.npmrc`:
 
@@ -52,6 +50,10 @@ Create the file `.npmrc` in your user home directory (or append to the existing 
 ```
 
 Replace TOKEN with your personal access token (**without** single/double quotes).
+
+## Create a new package
+
+TODO
 
 # Steps to reproduce
 
