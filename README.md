@@ -55,9 +55,13 @@ Replace TOKEN with your personal access token (**without** single/double quotes)
 
 TODO
 
-# Steps to reproduce
+# Installation procedure
 
-These are the steps I followed from scratch to have everything running:
+These are the steps I followed from scratch to have everything running.
+It includes repo creation, adding the dependencies, create and publish your first package.
+
+_You should not run those commands in your cloned local repo._
+_Instead, start from scratch: create a new dir and follow the steps_
 
 - Create a new git repo: `git init`
 - Create a new npm package: `npm init`
@@ -528,9 +532,7 @@ tsconfig.types.json
 npm run bootstrap
 ```
 
-This command will clean the `dist` and `node_modules` folders in every package (inside `packages/`).
-
-It will then run `npx lerna bootstrap` to install and link each package's dependencies. See: [lerna bootstrap](https://github.com/lerna/lerna/tree/main/commands/bootstrap#readme).
+This command will first run `npx lerna bootstrap` to install and link each package's dependencies. See: [lerna bootstrap](https://github.com/lerna/lerna/tree/main/commands/bootstrap#readme).
 
 Finally, it will generate the `dist` directory in each package with the build files.
 
@@ -540,7 +542,7 @@ Finally, it will generate the `dist` directory in each package with the build fi
 npm run lint
 ```
 
-This command will run `lit-analyzer` and `eslint` in each package.
+This command will run `tsc` for type-checking, `lit-analyzer` and `eslint` in each package.
 
 ## build
 
