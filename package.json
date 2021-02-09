@@ -11,7 +11,7 @@
     "build:types": "npx lerna exec -- tsc -p ./tsconfig.types.json",
     "check:types": "npx lerna exec -- tsc -p ./tsconfig.json",
     "watch": "npx lerna exec -- rollup -c=./rollup.config.js -w",
-    "prepare": "npm run bootstrap",
+    "prepare": "npx lerna bootstrap",
     "lint": "npm run check:types; npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "npx lerna exec -- eslint './src' -c '../../.eslintrc.js'",
     "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src'",

@@ -1,6 +1,6 @@
 {
   "name": "@fscholsen/flist-button",
-  "version": "0.0.5-alpha.0",
+  "version": "0.0.4-alpha.0",
   "description": "Flist UI Button component",
   "author": "fscholsen <fscholsen@gmail.com>",
   "homepage": "https://github.com/FScholsen/flist-ui/tree/main/packages/flist-button#flist-button",
@@ -14,11 +14,14 @@
   "dependencies": {
     "lit-element": "^2.4.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fscholsen/flist-ui.git"
+  },
   "publishConfig": {
     "@fscholsen:registry": "https://npm.pkg.github.com/fscholsen"
   },
   "bugs": {
     "url": "https://github.com/fscholsen/flist-ui/issues"
-  },
-  "gitHead": "59d24dfd01e70671113874dbc02addac31dfa665"
+  }
 }
