@@ -1,7 +1,2 @@
 // You can define a config here which will be added during the build process to babel config
-{
-  "plugins": [
-    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
-    ["@babel/plugin-proposal-class-properties"]
-  ]
-}
+{}
