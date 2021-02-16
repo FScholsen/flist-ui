@@ -1,2 +1,4 @@
 // You can define a config here which will be added during the build process to babel config
-{}
+{
+  "extends": "../../.babelrc"
+}

@@ -29,12 +29,6 @@ export default {
       extensions,
       include: ["src/**/*"],
       exclude: ["./node_modules/*"],
-      presets: [["@babel/preset-env"], ["@babel/preset-typescript"]],
-      plugins: [
-        ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true }],
-        ["@babel/plugin-proposal-class-properties"],
-        ["@babel/plugin-transform-runtime", { useESModules: true }],
-      ],
     }),
     typescript({ tsconfig: "tsconfig.types.json" }),
   ],
