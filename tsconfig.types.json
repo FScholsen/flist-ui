@@ -8,5 +8,5 @@
     "allowJs": false,
     "emitDeclarationOnly": true
   },
-  "exclude": ["tests"]
+  "exclude": ["tests", "dist"]
 }

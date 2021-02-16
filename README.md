@@ -655,6 +655,9 @@ This command will remove the `dist/` and `node_modules/` folders in each package
 
 - https://github.com/MikeLockz/lerna-rollup-yarn
 
+- https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter
+  - https://medium.com/@serhiihavrylenko/monorepo-setup-with-lerna-typescript-babel-7-and-other-part-1-ac60eeccba5f
+
 ## Lerna
 
 - https://github.com/lerna/lerna#getting-started
