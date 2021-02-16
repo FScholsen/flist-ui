@@ -18,6 +18,10 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules", "packages"]
+    },
     "plugins": [
       {
         "name": "ts-lit-plugin",
@@ -26,5 +30,5 @@
     ]
   },
   "include": ["packages"],
-  "exclude": ["node_modules"]
+  "exclude": ["**/node_modules", "**/dist"]
 }
