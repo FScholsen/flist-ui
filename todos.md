@@ -30,4 +30,6 @@
   - See config here:
     https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter/blob/master/README.MD#setting-up-package-manager
 
--
+- Setup the build config according to [this config](https://lit-element.polymer-project.org/guide/build#supporting-older-browsers) to allow using components in IE11
+
+- Add `.npmignore` in each package to exclude from publishing

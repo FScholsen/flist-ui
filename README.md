@@ -114,7 +114,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
   }
   ```
 
-  The line `"private": true,` was added to avoid publishing it to NPM (instead, publish `/packages/*` with lerna).
+  The line `"private": true,` was added to avoid publishing it to NPM (instead, we will publish `/packages/*` with lerna).
 
 - Add a `.gitignore`:
 
@@ -157,7 +157,9 @@ _Instead, start from scratch: create a new dir and follow the steps_
   }
   ```
 
-  For example, Lerna can be configured to manage packages versions independently or globally (on the example above it is global).
+  Lerna can be configured to manage packages versions independently or globally (on the example above it is global).
+
+  To set version as independent (which might be better in this case): `"version": "independent"`
 
 <!-- SET UP THE BUILD PROCESS -->
 <!-- The build process uses Babel and Rollup installed globally to the project -->
@@ -180,7 +182,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     - `@babel/core`: the core babel library, required for @rollup/plugin-babel
     - `@rollup/plugin-babel`: allows rollup to use babel
-    - `@babel/preset-env`: allows you to use the latest JavaScript features (no browser polyfills needed)
+    - `@babel/preset-env`: allows you to use the latest JavaScript ES6 features (no browser polyfills needed)
     - `@babel/preset-typescript`: allows babel to transpile Typescript to Javascript
     - `@babel/plugin-proposal-decorators`: allows to use proposal (or experimental) decorators
 
