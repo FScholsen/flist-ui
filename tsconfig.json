@@ -18,6 +18,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
       "*": ["node_modules", "packages"]
