@@ -511,6 +511,39 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     You can configure ESLint or Prettier to use per-package config file
 
+  - You can add plugins to ESLint to add lint support for WebComponents and lit-html :
+
+    - Run `npm i -D eslint eslint-plugin-wc`
+
+    - Run `npm i -D eslint eslint-plugin-lit`
+
+    - Edit `.eslintrc.js`, add those plugins to the `"plugins"` option:
+
+      ```
+      {
+        ...
+        "plugins": [..., "wc", "lit"],
+        ...
+      }
+      ```
+
+      Then configure the linter to use the recommended configuration for those plugins:
+
+      ```
+      {
+        ...
+        "extends": [
+          ...
+          "plugin:wc/recommended",
+          "plugin:lit/recommended",
+        ],
+        "env": {
+          "browser": true   // this must be present
+        }
+        ...
+      }
+      ```
+
 - Publish package to npm using `lerna publish` (or `npm publish` inside an individual package)
 
   - I am going to use GitHub Packages to store my packages in the same GitHub repo I'm using here.
@@ -641,6 +674,10 @@ This command will remove the `dist/` and `node_modules/` folders in each package
 
 # References links
 
+## Collection of similar repos
+
+Here is a collection of similar repos I inspired from to create this repo.
+
 - https://github.com/patrickvaler/lit-element-typescript-rollup-starter
 
   - here it uses rollup with plugin-terser to minify dist
@@ -709,16 +746,22 @@ This command will remove the `dist/` and `node_modules/` folders in each package
 
 - [LitElement documentation](https://lit-element.polymer-project.org/guide)
 
-## Prettier and Linter
+## Prettier
 
 - prettier.io:
 
   - https://prettier.io/docs/en/install.html
   - https://prettier.io/docs/en/precommit.html
 
+## Linter
+
 - https://eslint.org/docs/user-guide/getting-started
 
 - https://github.com/prettier/eslint-config-prettier
+
+- eslint plugins:
+  - [eslint-plugin-wc](https://www.npmjs.com/package/eslint-plugin-wc)
+  - [eslint-plugin-lit](https://www.npmjs.com/package/eslint-plugin-lit)
 
 ## Publish to GitHub Packages
 
