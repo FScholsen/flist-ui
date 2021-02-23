@@ -9,7 +9,6 @@
   "module": "dist/flist-input.js",
   "types": "dist/flist-input.d.ts",
   "scripts": {
-    "tsc": "npx tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {

@@ -8,6 +8,7 @@ import {
   CSSResult,
   query,
 } from "lit-element";
+// See https://lit-html.polymer-project.org/guide/styling-templates
 // import { classMap } from "lit-html/directives/class-map";
 import { ifDefined } from "lit-html/directives/if-defined";
 

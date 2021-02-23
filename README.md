@@ -697,9 +697,17 @@ This command will remove the `dist/` and `node_modules/` folders in each package
 
 - Typescript `baseUrl` option: https://www.typescriptlang.org/docs/handbook/module-resolution.html#base-url
 
+- [ts-lit-plugin](https://www.npmjs.com/package/ts-lit-plugin): add type checking to lit-html templates
+
 ## Lerna
 
 - https://github.com/lerna/lerna#getting-started
+
+## LitElement and lit-html
+
+- [lit-html documentation](https://lit-html.polymer-project.org/guide)
+
+- [LitElement documentation](https://lit-element.polymer-project.org/guide)
 
 ## Prettier and Linter
 
