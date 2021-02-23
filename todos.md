@@ -2,12 +2,22 @@
 
 - [ ] Add rollup terser plugin (`rollup-plugin-terse`) to produce the production build
 
+  - add `rollup-plugin-filesize` to show the file-size of the produced build
+
+- Install the `@webcomponents/webcomponentsjs` to install the polyfills for webcomponents for older browsers:
+
+  - npm i -D @webcomponents/webcomponentsjs
+
 - [ ] Update the README with :
 
   - [ ] updated build config (rollup, babel)
     - remove rollup-plugin-typescript from devDependencies
   - [ ] updated type-checking config (with tsc)
   - [x] project requirements (NodeJS LTS, npm)
+
+- [ ] Try to reinstall the repo from scratch (following the `Installation procedure` guide) once doc is updated
+
+  - [ ] fix potential mistakes
 
 - [x] Move to independent package version with Lerna
 
@@ -20,12 +30,13 @@
     - mocha
     - chai
     - jest
+    - puppeteer/puppeteer (?)
   - those packages might be useful:
     - `@open-wc/testing`
     - `@open-wc/testing-karma`
   - See the https://github.com/PolymerLabs/lit-element-starter-ts repo for references
 
-- Use `web-component-analyzer` npm package to generate documentation about the web-components
+- Use `web-component-analyzer` npm package to generate documentation about the web-components (See the https://github.com/PolymerLabs/lit-element-starter-ts)
 
 - [ ] Add `npm-run-all` in order to use `run-p [-c]`, it allows to run multiple commands without stopping the others after that one failed
 

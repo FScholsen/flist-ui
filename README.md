@@ -544,6 +544,29 @@ _Instead, start from scratch: create a new dir and follow the steps_
       }
       ```
 
+- Install `husky` and `lint-staged` and configure `pre-commit hooks`:
+
+  - Fastest way is to run `npx mrm lint-staged`
+
+    Before running this command, [documentation](https://github.com/okonet/lint-staged#installation-and-setup) advise to setup `Prettier` and `ESLint`, so make sure you configure it beforehand, like explained above.
+
+  - Or run `npm install --D husky lint-staged`
+
+    Then add the husky pre-commit hook and `lint-staged` object to your `package.json`:
+
+    ```
+    "husky": {
+      "hooks": {
+        "pre-commit": "lint-staged"
+      }
+    },
+    "lint-staged": {
+      "*.{js,ts}": ["prettier --write"]
+    }
+    ```
+
+- Add a `.npmignore`
+
 - Publish package to npm using `lerna publish` (or `npm publish` inside an individual package)
 
   - I am going to use GitHub Packages to store my packages in the same GitHub repo I'm using here.
@@ -575,10 +598,6 @@ _Instead, start from scratch: create a new dir and follow the steps_
     - Make some changes to the src files, add and commit with git (optionally build them using `npm run build`); you can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
     - (at project root again) `npx lerna publish`, specify github credentials and package new version after publish
       Lerna will create a tag when executing publish
-
-- Add precommit hooks with `husky` and `lint-staged`
-
-- Add a `.npmignore`
 
 # Configuration
 
@@ -728,6 +747,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - https://github.com/rough-stuff/wired-elements
 
+  An example of a lit-element library monorepo using rollup
+
 - https://lit-element.polymer-project.org/guide/build
 
 - https://github.com/johnagan/clean-webpack-plugin/blob/2b94838bd140cbf9d6b6f5449de7d1e676ed87b2/tsconfig.types.json
@@ -785,6 +806,10 @@ Here is a collection of similar repos I inspired from to create this repo.
 - [lit-html documentation](https://lit-html.polymer-project.org/guide)
 
 - [LitElement documentation](https://lit-element.polymer-project.org/guide)
+
+- [Polymer/lit-element GitHub repo](https://github.com/Polymer/lit-element)
+
+  This documentation describes how to use webcomponents polyfills (and how to include it in the client app, which is going to use the Web Components produced)
 
 ## Prettier
 
