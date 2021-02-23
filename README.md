@@ -665,6 +665,40 @@ npm run clean
 
 This command will remove the `dist/` and `node_modules/` folders in each package (inside `packages/`).
 
+# Monorepo structure
+
+```
+├── node_modules
+├── packages
+│   ├── package-name
+│   │   ├── dist          // only once the package is built
+│   │   ├── node_modules  // only once the package is bootstrapped (install packages dependencies)
+│   │   ├── src
+│   │   ├── tests
+│   │   ├── .babelrc
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   ├── README.md
+│   │   ├── rollup.config.js
+│   │   └── tsconfig.types.json
+│   └── ...
+├── .eslintignore
+├── .eslintrc.js
+├── .gitignore
+├── .npmrc
+├── .prettierignore
+├── .prettierrc
+├── babel.config.js
+├── index.html
+├── lerna.json
+├── package-lock.json
+├── package.json
+├── README.md
+├── rollup.config.js
+├── tsconfig.json
+└── tsconfig.types.json
+```
+
 # Suggestions:
 
 ## VSCode
