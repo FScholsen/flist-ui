@@ -16,7 +16,11 @@ Prettier
 
 ESLint
 
+Husky + Lint-Staged
+
 GitHub NPM registry (GitHub Packages)
+
+Storybook
 
 # About
 
@@ -567,6 +571,8 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
 - Add a `.npmignore`
 
+  TODO
+
 - Publish package to npm using `lerna publish` (or `npm publish` inside an individual package)
 
   - I am going to use GitHub Packages to store my packages in the same GitHub repo I'm using here.
@@ -818,6 +824,8 @@ Here is a collection of similar repos I inspired from to create this repo.
   - https://prettier.io/docs/en/install.html
   - https://prettier.io/docs/en/precommit.html
 
+- Configure Prettier in VSCode (using husky and lint-staged): https://glebbahmutov.com/blog/configure-prettier-in-vscode
+
 ## Linter
 
 - https://eslint.org/docs/user-guide/getting-started
@@ -827,6 +835,10 @@ Here is a collection of similar repos I inspired from to create this repo.
 - eslint plugins:
   - [eslint-plugin-wc](https://www.npmjs.com/package/eslint-plugin-wc)
   - [eslint-plugin-lit](https://www.npmjs.com/package/eslint-plugin-lit)
+
+## Husky and lint-staged
+
+- Configure Prettier with husky and lint-staged pre-commit hooks: https://prettier.io/docs/en/precommit.html#option-1-lint-stagedhttpsgithubcomokonetlint-staged
 
 ## Publish to GitHub Packages
 
