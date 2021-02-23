@@ -3,6 +3,8 @@
   "version": "0.0.0-alpha",
   "description": "Flist UI Web components monorepo",
   "private": true,
+  "author": "fscholsen <fscholsen@gmail.com>",
+  "license": "ISC",
   "scripts": {
     "bootstrap": "npx lerna bootstrap && npm run build:dist",
     "prebuild": "npm run clean:dist",
@@ -25,8 +27,6 @@
     "type": "git",
     "url": "https://github.com/fscholsen/flist-ui.git"
   },
-  "author": "fscholsen <fscholsen@gmail.com>",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
