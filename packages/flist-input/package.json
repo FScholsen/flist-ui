@@ -9,10 +9,14 @@
   "module": "dist/flist-input.js",
   "types": "dist/flist-input.d.ts",
   "scripts": {
+    "tsc": "npx tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
     "lit-element": "^2.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.5"
   },
   "repository": {
     "type": "git",

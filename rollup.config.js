@@ -1,11 +1,12 @@
-import { babel } from "@rollup/plugin-babel";
+import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import path from "path";
 
 // The name of the package must match the directory name
-const input = `./src/${path.basename(__dirname)}.ts`;
+const baseFileName = path.basename(__dirname);
+const input = `./src/${baseFileName}.ts`;
 const outputDir = "./dist/";
 const extensions = [".js", ".ts"];
 
@@ -15,11 +16,23 @@ export default {
   // When using with 'babelHelpers: "runtime"' (to allow async/await), it should be used as 'external' in Rollup config
   // but it results in fail to resolve module specifier
   // external: (id) => id.includes("@babel/runtime"),
-  output: {
-    dir: outputDir,
-    format: "esm",
-    sourcemap: true,
-  },
+  output: [
+    {
+      file: outputDir + baseFileName + ".js",
+      format: "esm",
+      sourcemap: true,
+    },
+    // Production build
+    // {
+    //   file: outputDir + baseFileName + ".min.js",
+    //   format: "esm",
+    //   TODO use terser/minifier (+ compress gzip)
+    // },
+    // {
+    //   file: outputDir + baseFileName + ".iife.js",
+    //   format: "iife",
+    // },
+  ],
   plugins: [
     resolve({ extensions }),
     // plugin-commonjs must be placed before plugin-babel
@@ -28,12 +41,10 @@ export default {
       babelHelpers: "runtime",
       extensions,
       include: ["src/**/*"],
-      exclude: ["./node_modules/*"],
-      presets: [["@babel/preset-env"], ["@babel/preset-typescript"]],
-      plugins: [
-        ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true }],
-        ["@babel/plugin-proposal-class-properties"],
-        ["@babel/plugin-transform-runtime", { useESModules: true }],
+      exclude: [
+        "./node_modules/*",
+        "node_modules/lit-element/**",
+        "node_modules/lit-html/**",
       ],
     }),
     typescript({ tsconfig: "tsconfig.types.json" }),

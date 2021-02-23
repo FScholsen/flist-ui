@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "es2020",
+    "target": "es2017",
+    "module": "es2015",
     "moduleResolution": "node",
-    "lib": ["es2020", "dom", "dom.iterable"],
+    "lib": ["es2017", "dom", "dom.iterable"],
     "declaration": false,
     "isolatedModules": true,
     "strict": true,
+    "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -17,6 +18,11 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules", "packages"]
+    },
     "plugins": [
       {
         "name": "ts-lit-plugin",
@@ -24,5 +30,6 @@
       }
     ]
   },
-  "exclude": ["node_modules"]
+  "include": ["packages"],
+  "exclude": ["**/node_modules", "**/dist"]
 }

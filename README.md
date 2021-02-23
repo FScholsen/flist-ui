@@ -42,6 +42,10 @@ This project uses:
 - [Storybook](https://storybook.js.org)  
   Storybook is a development environment for UI components. It allows you to browse a component library, view the different states of each component and interactively develop and test components.
 
+# Requirements
+
+- NodeJS LTS
+
 # Getting started
 
 ## Get the source code
@@ -62,13 +66,19 @@ git checkout main
 git pull
 ```
 
-## Install the dependencies and bootstrap
+## Install the dependencies
 
 ```
 npm install
 ```
 
-After running this command, npm will automatically run `npm prepare`, which will install dependencies in each package as well as building the sources into each package's `dist/`.
+After running this command, npm will automatically run `npm prepare`, which will install dependencies in each package (using `npx lerna bootstrap`).
+
+After this, you can build the sources into each package's `dist/` with:
+
+```
+npm run build
+```
 
 ## Authenticate on GitHub Packages (NPM)
 
@@ -114,7 +124,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
   }
   ```
 
-  The line `"private": true,` was added to avoid publishing it to NPM (instead, publish `/packages/*` with lerna).
+  The line `"private": true,` was added to avoid publishing it to NPM (instead, we will publish `/packages/*` with lerna).
 
 - Add a `.gitignore`:
 
@@ -157,7 +167,9 @@ _Instead, start from scratch: create a new dir and follow the steps_
   }
   ```
 
-  For example, Lerna can be configured to manage packages versions independently or globally (on the example above it is global).
+  Lerna can be configured to manage packages versions independently or globally (on the example above it is global).
+
+  To set version as independent (which might be better in this case) switch to `"version": "independent"`.
 
 <!-- SET UP THE BUILD PROCESS -->
 <!-- The build process uses Babel and Rollup installed globally to the project -->
@@ -180,7 +192,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     - `@babel/core`: the core babel library, required for @rollup/plugin-babel
     - `@rollup/plugin-babel`: allows rollup to use babel
-    - `@babel/preset-env`: allows you to use the latest JavaScript features (no browser polyfills needed)
+    - `@babel/preset-env`: allows you to use the latest JavaScript ES6 features (no browser polyfills needed)
     - `@babel/preset-typescript`: allows babel to transpile Typescript to Javascript
     - `@babel/plugin-proposal-decorators`: allows to use proposal (or experimental) decorators
 
@@ -654,6 +666,36 @@ This command will remove the `dist/` and `node_modules/` folders in each package
 - https://github.com/PolymerLabs/lit-element-starter-ts
 
 - https://github.com/MikeLockz/lerna-rollup-yarn
+
+- https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter
+
+  - https://medium.com/@serhiihavrylenko/monorepo-setup-with-lerna-typescript-babel-7-and-other-part-1-ac60eeccba5f
+
+- Rollup and Babel config to use async/await: https://github.com/htho/mweRollupBabelAsyncAwait
+
+  It is referenced in [this GitHub issue](https://github.com/rollup/rollup-plugin-babel/issues/312)
+
+  To polyfill async/await with Babel, it seems there are multiple ways to do it.
+
+  One way of one doing it is by using `@babel/preset-env` with `useBuiltins: "usage"`.
+
+  Another one way is by using `@babel/plugin-transform-runtime` (with `@babel/runtime` as dependency), the one that I use in this repo.
+
+  See [this SO thread](https://stackoverflow.com/questions/61208604/do-we-need-combine-the-transform-runtime-and-preset-env-in-an-application) for more informations.
+
+  By using the latter one, you don't have to include the `regenerator-runtime`, neither the `core-js` as dependencies ; instead you have to use the `@babel/runtime`.
+
+## Babel
+
+- Babel config files for monorepo structure: https://babeljs.io/docs/en/config-files#monorepos
+
+## LitElement build with Rollup (for older browsers)
+
+- Universal build: https://lit-element.polymer-project.org/guide/build#supporting-older-browsers
+
+## Typescript
+
+- Typescript `baseUrl` option: https://www.typescriptlang.org/docs/handbook/module-resolution.html#base-url
 
 ## Lerna
 
