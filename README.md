@@ -685,6 +685,10 @@ This command will remove the `dist/` and `node_modules/` folders in each package
 
   By using the latter one, you don't have to include the `regenerator-runtime`, neither the `core-js` as dependencies ; instead you have to use the `@babel/runtime`.
 
+## Babel
+
+- Babel config files for monorepo structure: https://babeljs.io/docs/en/config-files#6x-vs-7x-babelrc-loading
+
 ## LitElement build with Rollup (for older browsers)
 
 - Universal build: https://lit-element.polymer-project.org/guide/build#supporting-older-browsers
