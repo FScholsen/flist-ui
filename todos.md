@@ -1,3 +1,5 @@
+- [ ] Add rollup terser plugin to produce to production build
+
 - [ ] Update the README with :
 
   - [ ] updated build config (rollup, babel)

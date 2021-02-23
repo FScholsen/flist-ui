@@ -738,6 +738,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - https://github.com/MikeLockz/lerna-rollup-yarn
 
+  - this link is useful to setup the build configuration using a rollup global config file (with lerna-get-packages)
+
 - https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter
 
   - https://medium.com/@serhiihavrylenko/monorepo-setup-with-lerna-typescript-babel-7-and-other-part-1-ac60eeccba5f
@@ -773,6 +775,10 @@ Here is a collection of similar repos I inspired from to create this repo.
 ## Lerna
 
 - https://github.com/lerna/lerna#getting-started
+
+- [lerna-get-packages](https://www.npmjs.com/package/lerna-get-packages)
+
+  It's a npm package to get lerna monorepo sub-packages. It might be interesting to use it for the build configuration (See the MikeLockz/lerna-rollup-yarn github repo referenced above).
 
 ## LitElement and lit-html
 

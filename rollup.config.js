@@ -43,8 +43,8 @@ export default {
       include: ["src/**/*"],
       exclude: [
         "./node_modules/*",
-        "node_modules/lit-element/**",
-        "node_modules/lit-html/**",
+        "./node_modules/lit-element/**",
+        "./node_modules/lit-html/**",
       ],
     }),
     typescript({ tsconfig: "tsconfig.types.json" }),
