@@ -1,4 +1,6 @@
-- [ ] Add rollup terser plugin to produce to production build
+- [ ] Add Storybook to view and test components
+
+- [ ] Add rollup terser plugin (`rollup-plugin-terse`) to produce the production build
 
 - [ ] Update the README with :
 
@@ -13,7 +15,17 @@
 
 - [ ] Add Jest for testing, see: https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter/blob/master/README.MD#testing
 
-  - choose a testing framework
+  - choose a testing framework form this list:
+    - karma
+    - mocha
+    - chai
+    - jest
+  - those packages might be useful:
+    - `@open-wc/testing`
+    - `@open-wc/testing-karma`
+  - See the https://github.com/PolymerLabs/lit-element-starter-ts repo for references
+
+- Use `web-component-analyzer` npm package to generate documentation about the web-components
 
 - [ ] Add `npm-run-all` in order to use `run-p [-c]`, it allows to run multiple commands without stopping the others after that one failed
 

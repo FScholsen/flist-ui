@@ -40,12 +40,12 @@ export default {
     babel({
       babelHelpers: "runtime",
       extensions,
-      include: ["src/**/*"],
-      exclude: [
-        "./node_modules/*",
+      include: [
+        "src/**/*",
         "./node_modules/lit-element/**",
         "./node_modules/lit-html/**",
       ],
+      exclude: ["./node_modules/**"],
     }),
     typescript({ tsconfig: "tsconfig.types.json" }),
   ],
