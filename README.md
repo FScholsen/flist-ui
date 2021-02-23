@@ -687,7 +687,7 @@ This command will remove the `dist/` and `node_modules/` folders in each package
 
 ## Babel
 
-- Babel config files for monorepo structure: https://babeljs.io/docs/en/config-files#6x-vs-7x-babelrc-loading
+- Babel config files for monorepo structure: https://babeljs.io/docs/en/config-files#monorepos
 
 ## LitElement build with Rollup (for older browsers)
 
