@@ -1,6 +1,6 @@
 - [ ] Add Storybook to view and test components
 
-- [ ] Add rollup terser plugin (`rollup-plugin-terse`) to produce the production build
+- [ ] Add rollup terser plugin (`rollup-plugin-terser`) to produce the production build
 
   - add `rollup-plugin-filesize` to show the file-size of the produced build
 
@@ -8,11 +8,11 @@
 
   - npm i -D @webcomponents/webcomponentsjs
 
-- [ ] Update the README with :
+- [x] Update the README with :
 
-  - [ ] updated build config (rollup, babel)
-    - remove rollup-plugin-typescript from devDependencies
-  - [ ] updated type-checking config (with tsc)
+  - [x] updated build config (rollup, babel)
+    - [x] remove rollup-plugin-typescript from devDependencies
+  - [x] updated type-checking config (with tsc)
   - [x] project requirements (NodeJS LTS, npm)
 
 - [ ] Try to reinstall the repo from scratch (following the `Installation procedure` guide) once doc is updated
@@ -20,6 +20,10 @@
   - [ ] fix potential mistakes
 
 - [x] Move to independent package version with Lerna
+
+- [ ] Use autoprefixer in packages source to prefix css
+
+- [ ] Use scss with lit-element (with rollup sass plugin ?)
 
 - [ ] Add stylelint https://stylelint.io/, See: https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter/blob/master/README.MD#stylelint
 
@@ -78,4 +82,4 @@
     - https://babeljs.io/docs/en/babel-preset-env.html#corejs
     - https://github.com/rollup/plugins/tree/master/packages/babel
 
-- [ ] Add `.npmignore` in each package to exclude from publishing
+- [x] Add `.npmignore` in each package to exclude files from publishing

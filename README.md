@@ -108,6 +108,7 @@ It includes repo creation, adding the dependencies, create and publish your firs
 _You should not run those commands in your cloned local repo._
 _Instead, start from scratch: create a new dir and follow the steps_
 
+- Create a new directory for the project: `mkdir flist-ui && cd flist-ui`
 - Create a new git repo: `git init`
 - Create a new npm package: `npm init`
 
@@ -141,7 +142,6 @@ _Instead, start from scratch: create a new dir and follow the steps_
   .idea
   .project
   nbproject/
-  .vscode/*
 
   # Logs files
   *.log
@@ -156,7 +156,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
 - Install lerna: `npm install -D lerna`
 
-  It will add lerna as dev dependency.
+  It will add Lerna as dev dependency.
 
 - Create a new lerna monorepo: `npx lerna init`
 
@@ -164,29 +164,31 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   ```
   {
-    "packages": [
-      "packages/*"
-    ],
-    "version": "0.0.0"
+    "packages": ["packages/*"],
+    "version": "independent",
+    "command": {
+      "bootstrap": {
+        "hoist": false
+      }
+    }
   }
   ```
 
-  Lerna can be configured to manage packages versions independently or globally (on the example above it is global).
+  Lerna can be configured to manage packages versions independently or globally (on the example above it is independent).
 
-  To set version as independent (which might be better in this case) switch to `"version": "independent"`.
+  To set version as global switch to `"version": "0.0.0"` (replace 0.0.0 with an appropriate version number).
 
 <!-- SET UP THE BUILD PROCESS -->
-<!-- The build process uses Babel and Rollup installed globally to the project -->
+<!-- The build process uses Babel and Rollup installed globally for the whole project (monorepo) -->
 
-- Install rollup and babel to the main package (to `flist-ui/package.json`):
+- Install rollup and babel in the monorepo (to `flist-ui/package.json`):
 
-  - Run `cd ../..`
   - Make sure you are at the project root: run `pwd`, it should output `flist-ui` full path
   - Run `npm install -D rollup @rollup/plugin-node-resolve @rollup/plugin-commonjs`
 
     Details:
 
-    - `rollup`: allows to bundle source files to one (bigger) distribution-ready bundled file
+    - `rollup`: allows to bundle source files to one (bigger) bundled file
     - `@rollup/node-resolve`: allows to locate and bundle third-party dependencies in node_modules
     - `@rollup/commonjs`: convert CommonJS modules to ES6
 
@@ -196,45 +198,85 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     - `@babel/core`: the core babel library, required for @rollup/plugin-babel
     - `@rollup/plugin-babel`: allows rollup to use babel
-    - `@babel/preset-env`: allows you to use the latest JavaScript ES6 features (no browser polyfills needed)
+    - `@babel/preset-env`: allows you to use the latest JavaScript ES6 features
     - `@babel/preset-typescript`: allows babel to transpile Typescript to Javascript
     - `@babel/plugin-proposal-decorators`: allows to use proposal (or experimental) decorators
+
+  - Run `npm install -D @babel/plugin-transform-runtime` and `npm install --save @babel/runtime-corejs3` (or `npm install --save @babel/runtime`)
+
+    Details:
+
+    In order to use `async/await` in browsers which doesn't support it, babel will transform when using `preset-env` with `targets: "defaults"` and `useBuiltIns`. Babel won't automatically include the polyfills (helpers) for regenerator runtime (the default runtime used to polyfill async/await) so you have to include it yourself (either run `npm instal regenerator-runtime` or use a core-js runtime of your choice to polyfill these features). `@babel/preset-env` just transforms code with syntax, if we don’t config useBuiltIns.
+
+    This plugin allows to use `async/await` by transforming the helpers to use the `@babel/runtime-corejs3` instead of regenerator.
+
+    `@babel/plugin-transform-runtime` can provide re-use helpers, but don’t polyfill by default.
+
+    `@babel/runtime-corejs3` (or `@babel/runtime`) provide polyfills needed.
+
+    When using this runtime, Babel will inject the runtime libs (i.e. the polyfills) and will pass it to rollup when bundling in order to limit the code size (it won't import the runtime each time a call to async/await is made)). Instead of using `@babel/runtime` to include the runtime polyfills, I use `@babel/runtime-corejs3` and configure `@babel/plugin-transform-runtime` to use `corejs: 3` (to user corejs polyfills instead of regeneratorRuntime polyfills).
 
   - Create a `rollup.config.js` in the project root directory
 
     ```
-    // rollup.config.js
-    import { babel } from "@rollup/plugin-babel";
+    import babel from "@rollup/plugin-babel";
     import resolve from "@rollup/plugin-node-resolve";
     import commonjs from "@rollup/plugin-commonjs";
     import path from "path";
 
     // The name of the package must match the directory name
-    const input = `./src/${path.basename(__dirname)}.ts`;
+    const baseFileName = path.basename(__dirname);
+    const input = `./src/${baseFileName}.ts`;
     const outputDir = "./dist/";
     const extensions = [".js", ".ts"];
 
     export default {
       input,
-      output: {
-        dir: outputDir,
-        format: "esm",
-        sourcemap: true,
-      },
+      output: [
+        {
+          file: outputDir + baseFileName + ".js",
+          format: "esm",
+          sourcemap: true,
+        },
+        // Production build
+        // {
+        //   file: outputDir + baseFileName + ".min.js",
+        //   format: "esm",
+        //   TODO use terser/minifier (+ compress gzip)
+        // },
+      ],
       plugins: [
         resolve({ extensions }),
+        // plugin-commonjs must be placed before plugin-babel
         commonjs({ include: /node_modules/ }),
         babel({
-          babelHelpers: "bundled",
+          babelHelpers: "runtime",
           extensions,
-          include: ["src/**/*"],
-          exclude: ["./node_modules/*"],
-          presets: ["@babel/preset-env", "@babel/preset-typescript"],
-          plugins: [
-            ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true }],
-            ["@babel/plugin-proposal-class-properties"],
+          include: [
+            "src/**/*",
+            "./node_modules/lit-element/**",
+            "./node_modules/lit-html/**",
           ],
+          exclude: ["./node_modules/**"],
         }),
+      ],
+    };
+    ```
+
+    Rollup is configured to use Babel `runtime` helpers, because we want to use a runtime to polyfill `async/await`.
+
+  - Create a `babel.config.js` in the monorepo directory (i.e. project root directory):
+
+    ```
+    module.exports = {
+      presets: [
+        ["@babel/preset-env", { targets: "defaults" }],
+        ["@babel/preset-typescript"],
+      ],
+      plugins: [
+        ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true }],
+        ["@babel/plugin-proposal-class-properties"],
+        ["@babel/plugin-transform-runtime", { corejs: 3 }],
       ],
     };
     ```
@@ -256,10 +298,10 @@ _Instead, start from scratch: create a new dir and follow the steps_
         "module": "es2020",
         "moduleResolution": "node",
         "lib": ["es2020", "dom", "dom.iterable"],
-        "declaration": true,
-        "noEmit": true,
+        "declaration": false,
         "isolatedModules": true,
         "strict": true,
+        "noEmit": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
@@ -270,6 +312,11 @@ _Instead, start from scratch: create a new dir and follow the steps_
         "experimentalDecorators": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "baseUrl": "./",
+        "paths": {
+          "*": ["node_modules", "packages"]
+        },
         "plugins": [
           {
             "name": "ts-lit-plugin",
@@ -277,7 +324,8 @@ _Instead, start from scratch: create a new dir and follow the steps_
           }
         ]
       },
-      "exclude": ["node_modules"]
+      "include": ["packages"],
+      "exclude": ["**/node_modules", "**/dist"]
     }
     ```
 
@@ -294,7 +342,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
         "allowJs": false,
         "emitDeclarationOnly": true
       },
-      "exclude": ["tests"]
+      "exclude": ["**/tests"]
     }
     ```
 
@@ -306,23 +354,26 @@ _Instead, start from scratch: create a new dir and follow the steps_
   "scripts": {
     "bootstrap": "npx lerna bootstrap && npm run build:dist && npm run build:types",
     "prebuild": "npm run clean:dist",
-    "build": "npm run build:dist && npm run build:types",
-    "build:dist": "npx lerna exec -- rollup -c=./rollup.config.js",
-    "build:types": "npx lerna exec -- tsc -p ./tsconfig.types.json",
-    "check:types": "npx lerna exec -- tsc -p ./tsconfig.json",
+    "build": "npm run build:dist",
+    "build:dist": "npx lerna exec --parallel -- rollup -c=./rollup.config.js",
+    "build:types": "npx lerna exec --parallel -- tsc -p ./tsconfig.types.json",
+    "check:types": "npx tsc || echo Done.",
     "watch": "npx lerna exec -- rollup -c=./rollup.config.js -w",
-    "prepare": "npm run bootstrap",
+    "prepare": "npx lerna bootstrap",
+    "update-packages-dependencies": "npx lerna exec -- npm update",
     "clean": "npm run clean:packages",
     "clean:packages": "npm run clean:dist && npx lerna clean",
-    "clean:dist": "npx lerna exec -- rm -rf ./dist",
+    "clean:dist": "npx lerna exec --parallel -- rm -rf ./dist",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   ```
 
 <!-- CREATE A NEW COMPONENT -->
 
-- Create a new package `npx lerna create flist-button`
-  It will create directories `lib/` and `__tests__/` (which you can remove, or rename).
+- Create a new package `npx lerna create flist-button`.
+
+  It will create directories `lib/` and `__tests__/` (which you can remove, or rename to `src/` and `/tests`).
+
 - Add `lit-element` as dependency of the package (inside a per-package `package.json`):
 
   - Run `cd ./packages/flist-button`
@@ -350,59 +401,53 @@ _Instead, start from scratch: create a new dir and follow the steps_
     }
     ```
 
-  - Add a per-package `rollup.config.js`:
-    Copy this into `/packages/flist-button/rollup.config.js`
+- Add `typescript` as dev dependency of the package:
 
-    ```
-    import rollupBaseConfig from "../../rollup.config";
-    export default {
-      ...rollupBaseConfig,
-    };
-    ```
+  - (Make sure you're inside the `flist-ui/packages/flist-button` folder)
+  - Run `npm install -D typescript`
+    This dependency is not required but it will allow to typecheck our source files based on the monorepo `tsconfig.json`.
 
-    The default behaviour is to extend the config at project root, but you can create your own if you want (by removing the imported module from the exported object config).
+- Add a per-package `rollup.config.js`:
 
-    This configuration will allow to build each package independently if it's needed.
+  Copy this configuration into `/packages/flist-button/rollup.config.js`:
 
-  - Add a per-package `tsconfig.json`
+  ```
+  import rollupBaseConfig from "../../rollup.config";
+  export default {
+    ...rollupBaseConfig,
+  };
+  ```
 
-    ```
-    {
-      "extends": "../../tsconfig.json",
-      "include": ["./src"]
-    }
-    ```
+  The default behaviour is to extend the config at project root, but you can create your own if you want (by removing the imported module from the exported object config).
 
-    It will allow to type check each package independently.
+  This configuration will allow to build each package independently if it's needed.
 
-  - Add a per-package `tsconfig.types.json`
+- Add a per-package `tsconfig.types.json`
 
-    ```
-    {
-      "extends": "../../tsconfig.types.json",
-      "compilerOptions": {
-        "outDir": "./dist"
-      },
-      "include": ["./src"]
-    }
-    ```
+  ```
+  {
+    "extends": "../../tsconfig.types.json",
+    "compilerOptions": {
+      "outDir": "./dist"
+    },
+    "include": ["./src"]
+  }
+  ```
 
-    It will allow to transpile source files and emit `.d.ts` files.
+  It will allow to transpile source files to emit `.d.ts` files only.
 
-  - Optionally, you can create a per-package `.babelrc`
+- Create a per-package `.babelrc`
 
-    ```
-    // .babelrc
-    {
-      "presets": ["@babel/preset-env", "@babel/preset-typescript"],
-      "plugins": [
-        ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
-        ["@babel/plugin-proposal-class-properties"]
-      ]
-    }
-    ```
+  ```
+  // .babelrc
+  {
+    "extends": "../../babel.config.js"
+  }
+  ```
 
-    It will extend the existing configuration in `rollup.config.js`.
+  It will extend the existing configuration in `babel.config.js` which will then be used by rollup (in the monorepo `rollup.config.js`).
+
+  You can define a different config in this per-package configuration file which will be added during the build process to `babel.config.js`.
 
     <!-- Use monorepo commands -->
 
@@ -410,17 +455,21 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   This will generate `.js` files (from `./src` to `./dist` folder):
 
-  Run this command at project root (`cd ../..` and check for `flist-ui`)
+  Run this command at project root (`cd ../..` and check for `flist-ui` after running `pwd`)
 
-  ```
+  ```bash
   npm run build
   ```
 
-  First, it will execute `rollup` on each packages, using the `rollup.config.js` per-package configuration.
-  This will create per-package `./dist/*.js` dist files.
+  It will execute `rollup` on each packages, using the `rollup.config.js` per-package configuration (which then extends the monorepo one).
+  This will create per-package `./dist/*.js` distribution-ready files.
 
-  Then, it will execute `tsc` on each packages, using the `tsconfig.json` per-package configuration.
-  This will create per-package `./dist/*.d.ts` type declaration files.
+  ```bash
+  npm run build:types
+  ```
+
+  Then, it will execute `tsc` on each packages, using the `tsconfig.types.json` per-package configuration.
+  This will create per-package `./dist/*.d.ts` type declaration files for each package.
 
   Note:
 
@@ -446,19 +495,31 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Add a `.prettierrc`, to override the default configuration of Prettier if needed
 
+    Here is the default configuration files (which uses the default Prettier configuration):
+
+    ```
+    {
+      "printWidth": 80,
+      "tabWidth": 2,
+      "singleQuote": false,
+      "trailingComma": "es5",
+      "arrowParens": "always"
+    }
+    ```
+
 - Add ESLint to the monorepo:
 
-  - Run `npm install --D eslint`
-  - Run `npm install --D eslint-config-prettier`
+  - Run `npm install -D eslint`
+  - Run `npm install -D eslint-config-prettier`
 
     To avoid conflicts between eslint and prettier.
 
-  - (`npm install --D typescript` (you must install it in order to lint with typescript-eslint, but it should already be installed unless you skip it))
-  - Run `npm install --D @typescript-eslint/parser`
+  - (`npm install -D typescript` (you must install it in order to lint with typescript-eslint, but it should already be installed unless you skip it))
+  - Run `npm install -D @typescript-eslint/parser`
 
     Required when using `@typescript-eslint/eslint-plugin`.
 
-  - Run `npm install --D @typescript-eslint/eslint-plugin`
+  - Run `npm install -D @typescript-eslint/eslint-plugin`
 
     It provides lint rules for TypeScript.
 
@@ -475,13 +536,15 @@ _Instead, start from scratch: create a new dir and follow the steps_
         "plugin:@typescript-eslint/recommended",
         "prettier",
         "prettier/@typescript-eslint",
+        "plugin:wc/recommended",
+        "plugin:lit/recommended",
       ],
       parser: "@typescript-eslint/parser",
       parserOptions: {
         ecmaVersion: 12,
         sourceType: "module",
       },
-      plugins: ["@typescript-eslint"],
+      plugins: ["@typescript-eslint", "wc", "lit"],
       rules: {},
     };
     ```
@@ -519,7 +582,11 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     - Run `npm i -D eslint eslint-plugin-wc`
 
+      ESLint plugin for Web Components.
+
     - Run `npm i -D eslint eslint-plugin-lit`
+
+      lit-html support for ESLint.
 
     - Edit `.eslintrc.js`, add those plugins to the `"plugins"` option:
 
@@ -556,7 +623,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Or run `npm install --D husky lint-staged`
 
-    Then add the husky pre-commit hook and `lint-staged` object to your `package.json`:
+  - Then add the `husky` pre-commit hook and `lint-staged` object to your `package.json`, or make sure the configuration is like this if you ran the first command:
 
     ```
     "husky": {
@@ -565,43 +632,87 @@ _Instead, start from scratch: create a new dir and follow the steps_
       }
     },
     "lint-staged": {
-      "*.{js,ts}": ["prettier --write"]
+      "*.{ts}": "eslint --fix",
+      "*.{js,ts,css,md}": "prettier --write"
     }
     ```
 
-- Add a `.npmignore`
+- Add a per-package `.npmignore`:
 
-  TODO
+  In order to avoid publishing irrelevant files to npm, you can create a per-package `.npmignore`
+
+  ```
+  node_modules
+  tests
+  .babelrc
+  rollup.config.js
+  tsconfig.types.js
+  ```
 
 - Publish package to npm using `lerna publish` (or `npm publish` inside an individual package)
 
   - I am going to use GitHub Packages to store my packages in the same GitHub repo I'm using here.
 
-    - create a new Personal Access Token in GitHub settings
+    - Create a new Personal Access Token in GitHub settings
     - Select scopes: `write:packages`, `delete:packages` and generate the token
-    - copy the token and paste it in a new file `.npmrc` at the root of the project (ie `flist-ui/.npmrc`), like this:
+    - Copy the token and paste it in a new file `.npmrc` at the root of the project (ie `flist-ui/.npmrc`), like this:
 
-    ```
-    //npm.pkg.github.com/:\_authToken=TOKEN
-    @fscholsen:registry=https://npm.pkg.github.com/fscholsen
-    always-auth=true
-    ```
+      ```
+      //npm.pkg.github.com/:\_authToken=TOKEN
+      @fscholsen:registry=https://npm.pkg.github.com/fscholsen
+      always-auth=true
+      ```
 
-    Replace TOKEN by your personal access token (and `fscholsen` by your github owner name)
+    Replace TOKEN by your personal access token and `fscholsen` by your GitHub owner name.
 
-  - Add this to your `package.json` in each package:
-    Lerna will execute npm publish, using this config, in each package
+  - Add this to your monorepo `package.json`:
 
     ```
     "repository": {
       "type": "git",
-      "url": "git+https://github.com/fscholsen/flist-ui.git"
+      "url": "https://github.com/fscholsen/flist-ui.git"
     },
     ```
 
+    Replace the repo URL with your GitHub repository.
+
+  - Complete `package.json` in each package:
+
+    Make sure to use a scoped package name for your packages and to define main entry point of the package (with `main`, `module` and `types`)
+
+    Here is an example for the `flist-button` package (in `flist-ui/packages/flist-button`).
+
+    ```
+    "name": "@fscholsen/flist-button",
+    ...
+    "main": "dist/flist-button.js",
+    "module": "dist/flist-button.js",
+    "types": "dist/flist-button.d.ts",
+    "dependencies": {
+      "lit-element": "^2.4.0"
+    },
+    "devDependencies": {
+      "typescript": "^4.2.2"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/fscholsen/flist-ui.git"
+    },
+    "publishConfig": {
+      "@fscholsen:registry": "https://npm.pkg.github.com/fscholsen"
+    },
+    ```
+
+    Lerna will execute npm publish using this config in each package.
+
     Replace the `fscholsen/flist-ui` according to your name and repository name.
 
-    - Make some changes to the src files, add and commit with git (optionally build them using `npm run build`); you can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
+    - Make some changes to the source files
+    - Add and commit with git
+    - Build the source files using `npm run build`
+
+      You can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
+
     - (at project root again) `npx lerna publish`, specify github credentials and package new version after publish
       Lerna will create a tag when executing publish
 
@@ -617,20 +728,20 @@ You can override the per-package configuration (i.e. `./packages/*/rollup.config
 
 ### Extend tsconfig
 
+You can configure as well how type declaration files will be generated by editing the per-package `tsconfig.types.json` (i.e. `./packages/*/tsconfig.types.json`).
+
 ## Extend publish configuration
 
 You can create, in each package, a `.npmignore` file.
 
-This file should contain file or directories that you don't want to publish (to NPM or GitHub NPM Registry).
+This file should contain file or directories that you don't want to publish (to NPM or GitHub NPM Registry). You can define a diffrent one for each package (or simply omit it, if you want everything published).
 
 ```
 // ./packages/flist-button/.npmignore
 node_modules
-src
 tests
 .babelrc
 rollup.config.js
-tsconfig.json
 tsconfig.types.json
 ```
 
@@ -689,6 +800,14 @@ npm run clean
 ```
 
 This command will remove the `dist/` and `node_modules/` folders in each package (inside `packages/`).
+
+## update packages dependencies
+
+```bash
+npm run update-packages-dependencies
+```
+
+This command will update packages dependencies by running `npm update` in each packages (under `packages/`).
 
 # Monorepo structure
 
@@ -789,6 +908,11 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - Babel config files for monorepo structure: https://babeljs.io/docs/en/config-files#monorepos
 
+- Babel polyfills (plugin-transform-runtime and runtime):
+  - https://www.zzuu666.com/articles/9
+  - https://babeljs.io/docs/en/babel-plugin-transform-runtime#corejs
+  - https://babeljs.io/docs/en/babel-runtime
+
 ## LitElement build with Rollup (for older browsers)
 
 - Universal build: https://lit-element.polymer-project.org/guide/build#supporting-older-browsers
@@ -798,6 +922,10 @@ Here is a collection of similar repos I inspired from to create this repo.
 - Typescript `baseUrl` option: https://www.typescriptlang.org/docs/handbook/module-resolution.html#base-url
 
 - [ts-lit-plugin](https://www.npmjs.com/package/ts-lit-plugin): add type checking to lit-html templates
+
+## Rollup
+
+- Rollup plugins repo: https://github.com/rollup/plugins
 
 ## Lerna
 
@@ -839,6 +967,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 ## Husky and lint-staged
 
 - Configure Prettier with husky and lint-staged pre-commit hooks: https://prettier.io/docs/en/precommit.html#option-1-lint-stagedhttpsgithubcomokonetlint-staged
+
+- Use ESLint and Prettier in Typescript (with Husky and lint-staged): https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project
 
 ## Publish to GitHub Packages
 

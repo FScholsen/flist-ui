@@ -1,0 +1,5 @@
+node_modules
+tests
+.babelrc
+rollup.config.js
+tsconfig.types.js

@@ -42,10 +42,10 @@ export class FlistInput extends LitElement {
     }
   `;
 
-  firstUpdated(): void {
-    //   await new Promise((r) => setTimeout(r, 0));
-    //   let res = await this.test();
-    //   console.log(res);
+  async firstUpdated(): Promise<void> {
+    await new Promise((r) => setTimeout(r, 0));
+    const res = await this.test();
+    console.log(res);
 
     this.addEventListener("focus", this._handleFocus);
   }
@@ -54,11 +54,11 @@ export class FlistInput extends LitElement {
     console.log("focused");
   }
 
-  // async test(): Promise<string> {
-  //   return new Promise((resolve) => {
-  //     return resolve("loaded");
-  //   });
-  // }
+  async test(): Promise<string> {
+    return new Promise((resolve) => {
+      return resolve("loaded");
+    });
+  }
 
   render(): TemplateResult {
     return html`<input

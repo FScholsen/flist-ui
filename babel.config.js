@@ -6,6 +6,6 @@ module.exports = {
   plugins: [
     ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true }],
     ["@babel/plugin-proposal-class-properties"],
-    ["@babel/plugin-transform-runtime", { useESModules: true }],
+    ["@babel/plugin-transform-runtime", { corejs: 3 }],
   ],
 };

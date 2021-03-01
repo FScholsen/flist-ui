@@ -1,7 +1,6 @@
 import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
 import path from "path";
 
 // The name of the package must match the directory name
@@ -15,7 +14,7 @@ export default {
   // This is referenced in https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
   // When using with 'babelHelpers: "runtime"' (to allow async/await), it should be used as 'external' in Rollup config
   // but it results in fail to resolve module specifier
-  // external: (id) => id.includes("@babel/runtime"),
+  // external: [/@babel\/runtime/],
   output: [
     {
       file: outputDir + baseFileName + ".js",
@@ -47,6 +46,5 @@ export default {
       ],
       exclude: ["./node_modules/**"],
     }),
-    typescript({ tsconfig: "tsconfig.types.json" }),
   ],
 };
