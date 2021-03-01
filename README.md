@@ -209,7 +209,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     Details:
 
-    In order to use `async/await` in browsers which doesn't support it, babel will transform when using `preset-env` with `targets: "defaults"` and `useBuiltIns`. Babel won't automatically include the polyfills (helpers) for regenerator runtime (the default runtime used to polyfill async/await) so you have to include it yourself (either run `npm instal regenerator-runtime` or use a core-js runtime of your choice to polyfill these features). `@babel/preset-env` just transforms code with syntax, if we don’t config useBuiltIns.
+    In order to use `async/await` in browsers which doesn't support it, babel will transform code when using `preset-env` with `targets: "defaults"` and `useBuiltIns`. Babel won't automatically include the polyfills (helpers) for regeneratorRuntime (the default runtime used to polyfill `async/await`) so you have to include it yourself (either run `npm install regenerator-runtime` or use a core-js runtime of your choice to polyfill these features). `@babel/preset-env` just transforms code with syntax, if we don’t config useBuiltIns.
 
     This plugin allows to use `async/await` by transforming the helpers to use the `@babel/runtime-corejs3` instead of regenerator.
 

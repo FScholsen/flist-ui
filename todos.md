@@ -1,6 +1,6 @@
 - [ ] Add Storybook to view and test components
 
-- [ ] Add rollup terser plugin (`rollup-plugin-terser`) to produce the production build
+- [x] Add rollup terser plugin (`rollup-plugin-terser`) to produce the production build
 
   - add `rollup-plugin-filesize` to show the file-size of the produced build
 
