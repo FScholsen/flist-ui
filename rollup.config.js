@@ -1,6 +1,7 @@
 import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import { terser } from "rollup-plugin-terser";
 import path from "path";
 
 // The name of the package must match the directory name
@@ -22,11 +23,15 @@ export default {
       sourcemap: true,
     },
     // Production build
-    // {
-    //   file: outputDir + baseFileName + ".min.js",
-    //   format: "esm",
-    //   TODO use terser/minifier (+ compress gzip)
-    // },
+    {
+      file: outputDir + baseFileName + ".min.js",
+      format: "esm",
+      plugins: [
+        terser({
+          module: true,
+        }),
+      ],
+    },
     // {
     //   file: outputDir + baseFileName + ".iife.js",
     //   format: "iife",

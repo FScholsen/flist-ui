@@ -22,6 +22,8 @@ GitHub NPM registry (GitHub Packages)
 
 Storybook
 
+Karma + Mocha + Chai
+
 # About
 
 This project uses:
@@ -184,13 +186,14 @@ _Instead, start from scratch: create a new dir and follow the steps_
 - Install rollup and babel in the monorepo (to `flist-ui/package.json`):
 
   - Make sure you are at the project root: run `pwd`, it should output `flist-ui` full path
-  - Run `npm install -D rollup @rollup/plugin-node-resolve @rollup/plugin-commonjs`
+  - Run `npm install -D rollup @rollup/plugin-node-resolve @rollup/plugin-commonjs rollup-plugin-terser`
 
     Details:
 
     - `rollup`: allows to bundle source files to one (bigger) bundled file
     - `@rollup/node-resolve`: allows to locate and bundle third-party dependencies in node_modules
     - `@rollup/commonjs`: convert CommonJS modules to ES6
+    - `rollup-plugin-terser`: plugin to minify generated es bundle. Uses [terser](https://github.com/terser/terser) under the hood.
 
   - Run `npm install -D @babel/core @rollup/plugin-babel @babel/preset-env @babel/preset-typescript @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties`
 
@@ -222,6 +225,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
     import babel from "@rollup/plugin-babel";
     import resolve from "@rollup/plugin-node-resolve";
     import commonjs from "@rollup/plugin-commonjs";
+    import { terser } from "rollup-plugin-terser";
     import path from "path";
 
     // The name of the package must match the directory name
@@ -239,11 +243,15 @@ _Instead, start from scratch: create a new dir and follow the steps_
           sourcemap: true,
         },
         // Production build
-        // {
-        //   file: outputDir + baseFileName + ".min.js",
-        //   format: "esm",
-        //   TODO use terser/minifier (+ compress gzip)
-        // },
+        {
+          file: outputDir + baseFileName + ".min.js",
+          format: "esm",
+          plugins: [
+            terser({
+              module: true,
+            }),
+          ],
+        },
       ],
       plugins: [
         resolve({ extensions }),
