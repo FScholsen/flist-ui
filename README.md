@@ -8,6 +8,8 @@ LitElement
 
 Typescript
 
+PostCSS + Autoprefixer
+
 Babel
 
 Rollup
@@ -56,7 +58,7 @@ This project uses:
 
 ## Get the source code
 
-```
+```bash
 git clone https://github.com/FScholsen/flist-ui.git
 cd flist-ui
 ```
@@ -74,7 +76,7 @@ git pull
 
 ## Install the dependencies
 
-```
+```bash
 npm install
 ```
 
@@ -82,7 +84,7 @@ After running this command, npm will automatically run `npm prepare`, which will
 
 After this, you can build the sources into each package's `dist/` with:
 
-```
+```bash
 npm run build
 ```
 
@@ -116,7 +118,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   This will generate a `package.json`:
 
-  ```
+  ```json
   {
     "name": "flist-ui",
     "version": "0.0.0",
@@ -164,7 +166,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   It will create a new `lerna.json` where you can add [options](https://github.com/lerna/lerna#lernajson) and add a `packages/` directory:
 
-  ```
+  ```json
   {
     "packages": ["packages/*"],
     "version": "independent",
@@ -609,9 +611,21 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     Note: the prettier and prettier/@typescript-eslint in extends attribute were added to avoid conflict between linter and prettier.
 
-  - Install lit-analyzer `npm install -D lit-analyzer`
+  - Install lit-analyzer: `npm install -D lit-analyzer`
 
     It will allow to add type checks bindings in lit-html templates.
+
+  - Install stylelint: `npm install -D stylelint stylelint-config-standard stylelint-config-prettier`
+
+    It will lint styles (avoid errors in CSS and enfore conventions) and avoid rumes clashing with Prettier.
+
+    - Create a `.stylelintrc` at monorepo root:
+
+      ```json
+      {
+        "extends": ["stylelint-config-standard", "stylelint-config-prettier"]
+      }
+      ```
 
   - Add a `.eslintignore`:
 
@@ -626,9 +640,10 @@ _Instead, start from scratch: create a new dir and follow the steps_
     ```json
     "scripts": {
       ...
-      "lint": "npm run check:types; npm run lint:lit-analyzer && npm run lint:eslint",
+      "lint": "npm run check:types; npm run lint:css && npm run lint:lit-analyzer && npm run lint:eslint",
       "lint:eslint": "npx lerna exec -- eslint './src' -c '../../.eslintrc.js'",
       "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src'",
+      "lint:css": "stylelint 'packages/**/*.css'",
       "prettier": "npx lerna exec -- npx prettier --write . --ignore-path ../../.prettierignore",
       ...
     }
@@ -878,6 +893,7 @@ This command will update packages dependencies by running `npm update` in each p
 │   │   ├── src
 │   │   ├── tests
 │   │   ├── .babelrc
+│   │   ├── .npmignore
 │   │   ├── package-lock.json
 │   │   ├── package.json
 │   │   ├── README.md
@@ -890,6 +906,7 @@ This command will update packages dependencies by running `npm update` in each p
 ├── .npmrc
 ├── .prettierignore
 ├── .prettierrc
+├── .stylelintrc
 ├── babel.config.js
 ├── index.html
 ├── lerna.json
@@ -1010,8 +1027,13 @@ Here is a collection of similar repos I inspired from to create this repo.
   This documentation describes how to use webcomponents polyfills (and how to include it in the client app, which is going to use the Web Components produced)
 
 - Documentation about using/bundling polyfills for older browsers (IE11):
+
   - https://github.com/Polymer/lit-element/issues/978
   - https://github.com/Polymer/lit-element/issues/833
+
+- Add typedeclaration to css modules imports:
+  - https://github.com/mrmckeb/typescript-plugin-css-modules#custom-definitions
+  - https://skovy.dev/generating-typescript-definitions-for-css-modules-using-sass/
 
 ## Prettier
 

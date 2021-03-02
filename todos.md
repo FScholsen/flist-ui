@@ -4,7 +4,7 @@
 
   - add `rollup-plugin-filesize` to show the file-size of the produced build
 
-- Install the `@webcomponents/webcomponentsjs` to install the polyfills for webcomponents for older browsers:
+- [x] Install the `@webcomponents/webcomponentsjs` to install the polyfills for webcomponents for older browsers:
 
   - npm i -D @webcomponents/webcomponentsjs
 
@@ -21,11 +21,11 @@
 
 - [x] Move to independent package version with Lerna
 
-- [ ] Use autoprefixer in packages source to prefix css
+- [x] Use autoprefixer in packages source to prefix css
 
 - [ ] Use scss with lit-element (with rollup sass plugin ?)
 
-- [ ] Add stylelint https://stylelint.io/, See: https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter/blob/master/README.MD#stylelint
+- [x] Add stylelint https://stylelint.io/, See: https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter/blob/master/README.MD#stylelint
 
 - [ ] Add Jest for testing, see: https://github.com/serhii-havrylenko/monorepo-babel-ts-lerna-starter/blob/master/README.MD#testing
 

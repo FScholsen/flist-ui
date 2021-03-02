@@ -2,15 +2,16 @@ import {
   LitElement,
   html,
   customElement,
-  css,
   property,
   TemplateResult,
   CSSResult,
+  unsafeCSS,
   query,
 } from "lit-element";
 // See https://lit-html.polymer-project.org/guide/styling-templates
 // import { classMap } from "lit-html/directives/class-map";
 import { ifDefined } from "lit-html/directives/if-defined";
+import style from "./style.css";
 
 @customElement("flist-button")
 export class FlistButton extends LitElement {
@@ -27,56 +28,7 @@ export class FlistButton extends LitElement {
   @query("button")
   button?: HTMLButtonElement;
 
-  static styles: CSSResult = css`
-    :host {
-      display: inline-flex;
-      font-family: inherit;
-      color: rgba(0, 20, 0, 1) !important;
-      border: none !important;
-      border-radius: 4px;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-
-    button {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      font-family: inherit;
-      color: inherit;
-      border: 1px solid #cecece !important;
-      border-radius: inherit !important;
-      outline: none;
-      padding: 0.25rem 0.5rem;
-      cursor: pointer;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-        0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-      transition: box-shadow 0.2s ease;
-    }
-    :host([rounded]) {
-      border-radius: 100px;
-    }
-    :host([disabled]) {
-      opacity: 0.5;
-    }
-    :host button:hover:not(:disabled) {
-      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-        0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-    }
-    :host button:active:not(:disabled) {
-      box-shadow: none;
-    }
-
-    :host([disabled]) button {
-      cursor: not-allowed;
-    }
-    :host([disabled]) button,
-    :host([disabled]) button:hover {
-      box-shadow: none;
-    }
-  `;
+  static styles: CSSResult = unsafeCSS(style);
 
   /**
    * connectedCallback
