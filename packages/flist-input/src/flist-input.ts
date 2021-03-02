@@ -2,11 +2,16 @@ import {
   LitElement,
   html,
   customElement,
-  css,
   property,
   TemplateResult,
   CSSResult,
+  unsafeCSS,
 } from "lit-element";
+// PostCSS and autoprefixer will only work if you import
+// css from an external file and TypeScript doesn't complain about
+// type declaration (.d.ts) because custom.d.ts declare type for this module
+// (so make sure to include a custom.d.ts with the same content)
+import style from "./style.css";
 
 @customElement("flist-input")
 export class FlistInput extends LitElement {
@@ -16,31 +21,7 @@ export class FlistInput extends LitElement {
   @property()
   placeholder = "";
 
-  static styles: CSSResult = css`
-    :host {
-      display: inline-flex;
-      flex: 1 1 12rem;
-      min-width: 2rem;
-      height: 100%;
-      max-width: 32rem;
-      max-height: 3rem;
-    }
-    input {
-      background-color: #cecece;
-      border: 1px solid #cecece;
-      border-radius: 0.25rem;
-      padding: 0.5rem;
-      outline: none;
-      box-shadow: 0 0 1px 0 rgba(0, 0.2, 0, 0.2),
-        0 0 1px 1px rgba(0, 0, 0, 0.14);
-      transition: box-shadow 0.3s ease;
-      width: 100%;
-    }
-    input:focus {
-      border: 1px solid rgba(0, 0.2, 0, 0.25);
-      box-shadow: 0 0 2px 1px rgba(0, 0.2, 0, 0.25);
-    }
-  `;
+  static styles: CSSResult = unsafeCSS(style);
 
   async firstUpdated(): Promise<void> {
     await new Promise((r) => setTimeout(r, 0));

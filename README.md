@@ -219,13 +219,42 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     When using this runtime, Babel will inject the runtime libs (i.e. the polyfills) and will pass it to rollup when bundling in order to limit the code size (it won't import the runtime each time a call to async/await is made)). Instead of using `@babel/runtime` to include the runtime polyfills, I use `@babel/runtime-corejs3` and configure `@babel/plugin-transform-runtime` to use `corejs: 3` (to user corejs polyfills instead of regeneratorRuntime polyfills).
 
+  - Run `npm install -D postcss rollup-plugin-postcss autoprefixer`
+
+    It will allow to use external css modules inside your LitElement components (by importing css into your ts files) and autoprefixer will add browsers prefixes to your styles.
+
+    If you want to import css into your source files like this (I recommend doing like this):
+
+    ```ts
+    import {
+      LitElement, ..., CSSResult, unsafeCSS} from "lit-element";
+    import style from "./style.css";
+    ...
+    export class FlistInput extends LitElement {
+      ...
+      static styles: CSSResult = unsafeCSS(style);
+      ...
+    }
+    ```
+
+    You must create, inside your `src` folder, a `custom.d.ts` declaration file (inside `packages/flist-button/src/custom.d.ts` for example), with the following content:
+
+    ```ts
+    declare module "*.css" {
+      const classes: { [key: string]: string };
+      export default classes;
+    }
+    ```
+
   - Create a `rollup.config.js` in the project root directory
 
-    ```
+    ```js
     import babel from "@rollup/plugin-babel";
     import resolve from "@rollup/plugin-node-resolve";
     import commonjs from "@rollup/plugin-commonjs";
     import { terser } from "rollup-plugin-terser";
+    import postcss from "rollup-plugin-postcss";
+    import autoprefixer from "autoprefixer";
     import path from "path";
 
     // The name of the package must match the directory name
@@ -249,6 +278,9 @@ _Instead, start from scratch: create a new dir and follow the steps_
           plugins: [
             terser({
               module: true,
+              format: {
+                comments: false,
+              },
             }),
           ],
         },
@@ -257,6 +289,10 @@ _Instead, start from scratch: create a new dir and follow the steps_
         resolve({ extensions }),
         // plugin-commonjs must be placed before plugin-babel
         commonjs({ include: /node_modules/ }),
+        postcss({
+          plugins: [autoprefixer()],
+          inject: false,
+        }),
         babel({
           babelHelpers: "runtime",
           extensions,
@@ -275,7 +311,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Create a `babel.config.js` in the monorepo directory (i.e. project root directory):
 
-    ```
+    ```js
     module.exports = {
       presets: [
         ["@babel/preset-env", { targets: "defaults" }],
@@ -299,7 +335,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Create a `tsconfig.json` in this directory (`flist-ui`):
 
-    ```
+    ```json
     {
       "compilerOptions": {
         "target": "es2020",
@@ -339,7 +375,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Create a `tsconfig.types.json` in this directory (`flist-ui`):
 
-    ```
+    ```json
     {
       "extends": "./tsconfig.json",
       "compilerOptions": {
@@ -358,7 +394,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
 - Add scripts to the `flist-ui/package.json`, known as `monorepo-scripts`:
 
-  ```
+  ```json
   "scripts": {
     "bootstrap": "npx lerna bootstrap && npm run build:dist && npm run build:types",
     "prebuild": "npm run clean:dist",
@@ -390,7 +426,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     Create a new `src/flist-button.ts`
 
-    ```
+    ```ts
     // create the file src/flist-button.ts
     import { LitElement, html, customElement, property } from "lit-element";
     @customElement("flist-button")
@@ -419,7 +455,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   Copy this configuration into `/packages/flist-button/rollup.config.js`:
 
-  ```
+  ```js
   import rollupBaseConfig from "../../rollup.config";
   export default {
     ...rollupBaseConfig,
@@ -432,7 +468,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
 - Add a per-package `tsconfig.types.json`
 
-  ```
+  ```json
   {
     "extends": "../../tsconfig.types.json",
     "compilerOptions": {
@@ -446,12 +482,26 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
 - Create a per-package `.babelrc`
 
-  ```
+  ```json
   // .babelrc
   {
     "extends": "../../babel.config.js"
   }
   ```
+
+- Add `webcomponents/webcomponents` polyfills and include them in `index.html`:
+
+  - Run `npm install -D @webcomponents/webcomponentsjs`
+  - Load the polyfills in `index.html`:
+
+    ```html
+    <!-- If your application is compiled to ES5, then load this script first. -->
+    <script src="./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+    <!-- Add support for Web Components to older browsers. -->
+    <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    ```
+
+    This configuration currently doesn't work in older browsers. It needs additional configuration (See: [LitElement Build for production documentation](<#-LitElement-build-with-Rollup-(for-older-browsers)>)) to work in IE11.
 
   It will extend the existing configuration in `babel.config.js` which will then be used by rollup (in the monorepo `rollup.config.js`).
 
@@ -505,7 +555,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     Here is the default configuration files (which uses the default Prettier configuration):
 
-    ```
+    ```json
     {
       "printWidth": 80,
       "tabWidth": 2,
@@ -533,7 +583,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Run `npx eslint --init` to generate a default config file, or use this one `.eslintrc.js`:
 
-    ```
+    ```js
     module.exports = {
       env: {
         browser: true,
@@ -573,7 +623,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Add this to `package.json` scripts:
 
-    ```
+    ```json
     "scripts": {
       ...
       "lint": "npm run check:types; npm run lint:lit-analyzer && npm run lint:eslint",
@@ -598,7 +648,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     - Edit `.eslintrc.js`, add those plugins to the `"plugins"` option:
 
-      ```
+      ```js
       {
         ...
         "plugins": [..., "wc", "lit"],
@@ -608,7 +658,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
       Then configure the linter to use the recommended configuration for those plugins:
 
-      ```
+      ```js
       {
         ...
         "extends": [
@@ -633,7 +683,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Then add the `husky` pre-commit hook and `lint-staged` object to your `package.json`, or make sure the configuration is like this if you ran the first command:
 
-    ```
+    ```json
     "husky": {
       "hooks": {
         "pre-commit": "lint-staged"
@@ -675,7 +725,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Add this to your monorepo `package.json`:
 
-    ```
+    ```json
     "repository": {
       "type": "git",
       "url": "https://github.com/fscholsen/flist-ui.git"
@@ -690,7 +740,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     Here is an example for the `flist-button` package (in `flist-ui/packages/flist-button`).
 
-    ```
+    ```json
     "name": "@fscholsen/flist-button",
     ...
     "main": "dist/flist-button.js",
@@ -898,6 +948,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 
   - https://medium.com/@serhiihavrylenko/monorepo-setup-with-lerna-typescript-babel-7-and-other-part-1-ac60eeccba5f
 
+- Polymer LitElement component library: https://github.com/vaadin/vaadin-grid
+
 - Rollup and Babel config to use async/await: https://github.com/htho/mweRollupBabelAsyncAwait
 
   It is referenced in [this GitHub issue](https://github.com/rollup/rollup-plugin-babel/issues/312)
@@ -957,6 +1009,10 @@ Here is a collection of similar repos I inspired from to create this repo.
 
   This documentation describes how to use webcomponents polyfills (and how to include it in the client app, which is going to use the Web Components produced)
 
+- Documentation about using/bundling polyfills for older browsers (IE11):
+  - https://github.com/Polymer/lit-element/issues/978
+  - https://github.com/Polymer/lit-element/issues/833
+
 ## Prettier
 
 - prettier.io:
@@ -975,6 +1031,12 @@ Here is a collection of similar repos I inspired from to create this repo.
 - eslint plugins:
   - [eslint-plugin-wc](https://www.npmjs.com/package/eslint-plugin-wc)
   - [eslint-plugin-lit](https://www.npmjs.com/package/eslint-plugin-lit)
+
+### stylelint
+
+- https://stylelint.io/
+
+- Prettier and stylelint: https://github.com/prettier/stylelint-config-prettier
 
 ## Husky and lint-staged
 

@@ -2,6 +2,8 @@ import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
+import postcss from "rollup-plugin-postcss";
+import autoprefixer from "autoprefixer";
 import path from "path";
 
 // The name of the package must match the directory name
@@ -52,6 +54,10 @@ export default {
     resolve({ extensions }),
     // plugin-commonjs must be placed before plugin-babel
     commonjs({ include: /node_modules/ }),
+    postcss({
+      plugins: [autoprefixer()],
+      inject: false,
+    }),
     babel({
       babelHelpers: "runtime",
       extensions,
