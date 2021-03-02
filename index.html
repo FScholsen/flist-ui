@@ -21,20 +21,25 @@
     </style>
   </head>
   <body>
-    <script
-      type="module"
-      src="packages/flist-button/dist/flist-button.min.js"
-    ></script>
-    <script
-      type="module"
-      src="packages/flist-input/dist/flist-input.min.js"
-    ></script>
+    <!-- If your application is compiled to ES5, then load this script first. -->
+    <script src="./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+    <!-- Add support for Web Components to older browsers. -->
+    <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script type="module">
+      import "./packages/flist-button/dist/flist-button.js";
+      import "./packages/flist-input/dist/flist-input.js";
+    </script>
+
+    <!-- <script src="./packages/flist-button/dist/flist-button.iife.js"></script> -->
+    <!-- <script src="./packages/flist-input/dist/flist-input.iife.js"></script> -->
+
     <h1>Buttons</h1>
     <flist-button class="button">Send</flist-button>
     <flist-button class="button active large" rounded>Send</flist-button>
     <flist-button class="button active large">Send</flist-button>
     <flist-button>Cancel</flist-button>
     <flist-button disabled>Delete</flist-button>
+    <h1>Inputs</h1>
     <flist-input name="name" placeholder="Search"></flist-input>
     <!-- <flist-input name="name" /> -->
     <script>

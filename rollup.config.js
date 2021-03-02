@@ -35,9 +35,17 @@ export default {
         }),
       ],
     },
+    // Production build for nomodule script
     // {
     //   file: outputDir + baseFileName + ".iife.js",
     //   format: "iife",
+    //   plugins: [
+    //     terser({
+    //       format: {
+    //         comments: false,
+    //       },
+    //     }),
+    //   ],
     // },
   ],
   plugins: [
@@ -48,7 +56,7 @@ export default {
       babelHelpers: "runtime",
       extensions,
       include: [
-        "src/**/*",
+        "./src/**/*",
         "./node_modules/lit-element/**",
         "./node_modules/lit-html/**",
       ],

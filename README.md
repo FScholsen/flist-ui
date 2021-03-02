@@ -943,6 +943,10 @@ Here is a collection of similar repos I inspired from to create this repo.
 
   It's a npm package to get lerna monorepo sub-packages. It might be interesting to use it for the build configuration (See the MikeLockz/lerna-rollup-yarn github repo referenced above).
 
+## Web Components
+
+- Web Components Polyfills: https://github.com/webcomponents/polyfills
+
 ## LitElement and lit-html
 
 - [lit-html documentation](https://lit-html.polymer-project.org/guide)
