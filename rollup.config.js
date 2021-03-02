@@ -29,6 +29,9 @@ export default {
       plugins: [
         terser({
           module: true,
+          format: {
+            comments: false,
+          },
         }),
       ],
     },
