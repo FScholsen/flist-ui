@@ -11,12 +11,8 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
-  "dependencies": {
-    "lit-element": "^2.4.0"
-  },
-  "devDependencies": {
-    "typescript": "^4.2.2"
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fscholsen/flist-ui.git"
