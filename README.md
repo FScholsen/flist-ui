@@ -423,7 +423,6 @@ _Instead, start from scratch: create a new dir and follow the steps_
 - Add `lit-element` as dependency of the package (inside a per-package `package.json`):
 
   - Run `cd ./packages/flist-button`
-  - Run `npm install lit-element`
   - Use lit-element as dependency of the package:
 
     Create a new `src/flist-button.ts`
@@ -446,12 +445,6 @@ _Instead, start from scratch: create a new dir and follow the steps_
       }
     }
     ```
-
-- Add `typescript` as dev dependency of the package:
-
-  - (Make sure you're inside the `flist-ui/packages/flist-button` folder)
-  - Run `npm install -D typescript`
-    This dependency is not required but it will allow to typecheck our source files based on the monorepo `tsconfig.json`.
 
 - Add a per-package `rollup.config.js`:
 
@@ -491,6 +484,10 @@ _Instead, start from scratch: create a new dir and follow the steps_
   }
   ```
 
+  It will extend the existing configuration in `babel.config.js` which will then be used by rollup (in the monorepo `rollup.config.js`).
+
+  You can define a different config in this per-package configuration file which will be added during the build process to `babel.config.js`.
+
 - Add `webcomponents/webcomponents` polyfills and include them in `index.html`:
 
   - Run `npm install -D @webcomponents/webcomponentsjs`
@@ -504,10 +501,6 @@ _Instead, start from scratch: create a new dir and follow the steps_
     ```
 
     This configuration currently doesn't work in older browsers. It needs additional configuration (See: [LitElement Build for production documentation](<#-LitElement-build-with-Rollup-(for-older-browsers)>)) to work in IE11.
-
-  It will extend the existing configuration in `babel.config.js` which will then be used by rollup (in the monorepo `rollup.config.js`).
-
-  You can define a different config in this per-package configuration file which will be added during the build process to `babel.config.js`.
 
     <!-- Use monorepo commands -->
 
@@ -787,7 +780,49 @@ _Instead, start from scratch: create a new dir and follow the steps_
       You can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
 
     - (at project root again) `npx lerna publish`, specify github credentials and package new version after publish
-      Lerna will create a tag when executing publish
+
+      Lerna will create a tag when executing publish.
+
+- Install and configure Storybook:
+
+  - Run `npx sb init`
+
+    It will install Storybook and will prompt you to choose a default configuration.
+
+  - Select manually the project configuration `WebComponents`
+
+    It will install the required dependencies to run storybook.
+
+  - Change the main config file of Storybook `.storybook/main.js`:
+
+    ```js
+    module.exports = {
+      stories: ["../packages/**/*.stories.@(js|ts)"],
+      addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
+    };
+    ```
+
+  - Run `npm run storybook` to start Storybook
+
+  - Create stories for components:
+
+    - Create a new file inside one of your components' `src/` directory:
+
+      It must match the file pattern defined above (i.e. something ending with `src/*.stories.js`):
+
+      ```js
+      // packages/flist-button/src/flist-button.stories.js
+      import { html } from "lit-element";
+      import "../dist/flist-button";
+      export default {
+        title: "Components/FlistButton",
+        components: "flist-button",
+      };
+      const Template = () => html`<flist-button></flist-button>`;
+      export const Primary = Template.bind({});
+      ```
+
+      For more details to customize stories, see [Storybook documentation](https://storybook.js.org/docs/vue/writing-stories/introduction).
 
 # Configuration
 
@@ -874,13 +909,13 @@ npm run clean
 
 This command will remove the `dist/` and `node_modules/` folders in each package (inside `packages/`).
 
-## update packages dependencies
+## storybook
 
 ```bash
-npm run update-packages-dependencies
+npm run storybook
 ```
 
-This command will update packages dependencies by running `npm update` in each packages (under `packages/`).
+This command will start Storybook. You will be able to browse your components library with previously written stories.
 
 # Monorepo structure
 
@@ -1070,3 +1105,11 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages
 - https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages#authenticating-to-github-packages
+
+## Storybook
+
+- Storybook documentation: https://storybook.js.org/docs/web-components/get-started/install
+- Writing stories for WebComponents and LitElement:
+  - https://dev.to/sinhapiyush/introduction-to-storybook-for-web-components-jc3
+  - https://code.whoisryosuke.com/docs/js/web-components/storybook/
+  - https://webcomponents.dev/docs/csf/

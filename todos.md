@@ -1,4 +1,4 @@
-- [ ] Add Storybook to view and test components
+- [x] Add Storybook to view and test components
 
 - [x] Add rollup terser plugin (`rollup-plugin-terser`) to produce the production build
 
