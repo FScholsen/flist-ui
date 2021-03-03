@@ -824,6 +824,19 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
       For more details to customize stories, see [Storybook documentation](https://storybook.js.org/docs/vue/writing-stories/introduction).
 
+- Install `web-component-analyzer` to generate documentation for components:
+
+  - Run `npm install -D web-component-analyzer`
+  - Add this script to monorepo's `package.json`:
+
+    ```json
+    {
+      "scripts": {
+        "docs": "wca analyze 'packages/**/src/*.ts' --format markdown"
+      }
+    }
+    ```
+
 # Configuration
 
 ## Extend build configuration
@@ -1113,3 +1126,7 @@ Here is a collection of similar repos I inspired from to create this repo.
   - https://dev.to/sinhapiyush/introduction-to-storybook-for-web-components-jc3
   - https://code.whoisryosuke.com/docs/js/web-components/storybook/
   - https://webcomponents.dev/docs/csf/
+
+## web-component-analyzer
+
+- https://www.npmjs.com/package/web-component-analyzer

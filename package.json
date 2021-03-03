@@ -24,7 +24,8 @@
     "clean:dist": "npx lerna exec --parallel -- rm -rf ./dist",
     "test": "echo \"Error: run tests from root\" && exit 1",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "docs": "wca analyze 'packages/**/src/*.ts' --format markdown"
   },
   "repository": {
     "type": "git",
@@ -67,7 +68,8 @@
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^20.0.0",
     "ts-lit-plugin": "^1.2.1",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.2",
+    "web-component-analyzer": "^1.1.6"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.13.8"

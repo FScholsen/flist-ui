@@ -1,4 +1,7 @@
-- [x] Add Storybook to view and test components
+- [ ] Add Storybook to view and test components
+
+  - Add knobs to Storybook
+  - Use CSS Custom properties inside LitElement components
 
 - [x] Add rollup terser plugin (`rollup-plugin-terser`) to produce the production build
 
