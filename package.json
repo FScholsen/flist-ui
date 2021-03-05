@@ -25,7 +25,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "docs": "wca analyze 'packages/**/src/*.ts' --format markdown"
+    "docs": "npx wca analyze 'packages/**/src/*.ts' --format markdown",
+    "build:docs": "npx lerna exec --parallel -- wca './src/*.ts' --outFile 'dist/custom-elements.json'"
   },
   "repository": {
     "type": "git",

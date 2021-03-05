@@ -1,4 +1,4 @@
-# compiled output
+# Compiled output
 **/dist
 /tmp
 storybook-static
@@ -11,9 +11,15 @@ nbproject/
 # Logs files
 *.log
 
+# Env files
+.env*
+
 # Dependency directories
 node_modules/
 
 # System Files
 .DS_Store
 Thumbs.db
+
+# Test Output
+coverage/

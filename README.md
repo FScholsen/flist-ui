@@ -964,6 +964,7 @@ This command will generate documentation about your components. See [web-compone
 │   └── ...
 ├── .eslintignore
 ├── .eslintrc.js
+├── .gitattributes
 ├── .gitignore
 ├── .npmrc
 ├── .prettierignore
@@ -1144,6 +1145,7 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - Examples:
   - https://monorepo-git-fix-button-knob-use-state.storybook.now.sh/polymer-cli/?
+  - https://medium.com/@annycarolinegnr/storybook-with-react-typescript-1c15a1cbc26a
 
 ## web-component-analyzer
 

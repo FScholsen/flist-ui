@@ -1,7 +1,9 @@
+- [ ] Add GitHub workflow for CI (https://github.com/microsoft/covid-vaccine-bot/blob/main/.github/workflows/main.yml)
+
 - [ ] Add Storybook to view and test components
 
-  - Add knobs to Storybook
-  - Use CSS Custom properties inside LitElement components
+  - [x] Add knobs to Storybook
+  - [x] Use CSS Custom properties inside LitElement components
 
 - [x] Add rollup terser plugin (`rollup-plugin-terser`) to produce the production build
 
