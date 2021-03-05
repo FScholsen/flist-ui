@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const flistInput = require('..');
+const flistInput = require("..");
 
-describe('flist-input', () => {
-    it('needs tests');
+describe("flist-input", () => {
+  it("needs tests");
 });
