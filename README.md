@@ -793,12 +793,18 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     It will install the required dependencies to run storybook.
 
+  - Install Storybook Knobs: `npm install -D @storybook/addon-knobs`
+
   - Change the main config file of Storybook `.storybook/main.js`:
 
     ```js
     module.exports = {
       stories: ["../packages/**/*.stories.@(js|ts)"],
-      addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
+      addons: [
+        "@storybook/addon-links",
+        "@storybook/addon-essentials",
+        "@storybook/addon-knobs",
+      ],
     };
     ```
 
@@ -929,6 +935,14 @@ npm run storybook
 ```
 
 This command will start Storybook. You will be able to browse your components library with previously written stories.
+
+## docs
+
+```bash
+npm run docs
+```
+
+This command will generate documentation about your components. See [web-component-analyzer](https://github.com/runem/web-component-analyzer).
 
 # Monorepo structure
 
@@ -1123,9 +1137,13 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - Storybook documentation: https://storybook.js.org/docs/web-components/get-started/install
 - Writing stories for WebComponents and LitElement:
+
   - https://dev.to/sinhapiyush/introduction-to-storybook-for-web-components-jc3
   - https://code.whoisryosuke.com/docs/js/web-components/storybook/
   - https://webcomponents.dev/docs/csf/
+
+- Examples:
+  - https://monorepo-git-fix-button-knob-use-state.storybook.now.sh/polymer-cli/?
 
 ## web-component-analyzer
 

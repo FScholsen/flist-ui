@@ -7,6 +7,7 @@ import {
   CSSResult,
   unsafeCSS,
 } from "lit-element";
+import { ifDefined } from "lit-html/directives/if-defined";
 // PostCSS and autoprefixer will only work if you import
 // css from an external file and TypeScript doesn't complain about
 // type declaration (.d.ts) because custom.d.ts declare type for this module
@@ -15,11 +16,19 @@ import style from "./style.css";
 
 @customElement("flist-input")
 export class FlistInput extends LitElement {
-  @property()
-  name = "default";
+  /**
+   * The name of the input
+   * @type {string}
+   */
+  @property({ type: String, attribute: true, reflect: true })
+  name?: string = "default";
 
-  @property()
-  placeholder = "";
+  /**
+   * The input placeholder
+   * @type {string}
+   */
+  @property({ type: String, attribute: true, reflect: true })
+  placeholder?: string = "";
 
   static styles: CSSResult = unsafeCSS(style);
 
@@ -44,15 +53,9 @@ export class FlistInput extends LitElement {
   render(): TemplateResult {
     return html`<input
       type="text"
-      name="${this.name}"
+      name="${ifDefined(this.name)}"
       autocomplete="off"
-      placeholder="${this.placeholder}"
+      placeholder="${ifDefined(this.placeholder)}"
     />`;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "flist-input": FlistInput;
   }
 }

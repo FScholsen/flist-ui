@@ -16,17 +16,41 @@ import style from "./style.css";
 @customElement("flist-button")
 export class FlistButton extends LitElement {
   // Declare observed properties
+  /**
+   * @type {string}
+   */
   @property({ type: String, attribute: true, reflect: true })
   type: "submit" | "button" | "auto" = "submit";
 
+  /**
+   * @type {string}
+   */
   @property({ type: String, attribute: true, reflect: true })
   class?: string = "";
 
+  /**
+   * @type {boolean}
+   */
   @property({ type: Boolean, attribute: true, reflect: true })
   disabled?: boolean = false;
 
+  /**
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: true, reflect: true })
+  rounded?: boolean = false;
+
+  /**
+   * @type {HTMLButtonElement}
+   */
   @query("button")
   button?: HTMLButtonElement;
+
+  /**
+   * @type {((this: GlobalEventHandlers, ev: MouseEvent) => void) | null}
+   */
+  @property({ attribute: true, reflect: true })
+  onclick!: ((this: GlobalEventHandlers, ev: MouseEvent) => void) | null;
 
   static styles: CSSResult = unsafeCSS(style);
 
@@ -70,7 +94,7 @@ export class FlistButton extends LitElement {
   }
 
   buttonFocusHandler(): void {
-    // console.log(this);
+    // console.log("button");
   }
 
   // class="${ifDefined(!!this.class ? this.class : undefined)}"
@@ -81,6 +105,9 @@ export class FlistButton extends LitElement {
       .type="${this.type}"
       ?disabled="${this.disabled}"
       class="${ifDefined(this.class ? this.class : undefined)}"
+      onclick="${ifDefined(
+        ifDefined(this.onclick) === null ? undefined : ifDefined(this.onclick)
+      )}"
       @click="${this.buttonClickHandler}"
       @focus="${this.buttonFocusHandler}"
     >
@@ -91,10 +118,4 @@ export class FlistButton extends LitElement {
   // createRenderRoot() {
   //   return this;
   // }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "flist-button": FlistButton;
-  }
 }
