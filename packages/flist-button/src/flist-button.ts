@@ -105,7 +105,7 @@ export class FlistButton extends LitElement {
     event.stopPropagation();
     event.preventDefault();
     this.dispatchEvent(new CustomEvent("flist-button-click"));
-    // this.dispatchEvent(new MouseEvent());
+    this.dispatchEvent(new MouseEvent(""));
   }
 
   buttonFocusHandler(): void {

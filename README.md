@@ -962,6 +962,8 @@ This command will generate documentation about your components. See [web-compone
 │   │   ├── rollup.config.js
 │   │   └── tsconfig.types.json
 │   └── ...
+├── .env
+├── .editorconfig
 ├── .eslintignore
 ├── .eslintrc.js
 ├── .gitattributes
@@ -985,8 +987,8 @@ This command will generate documentation about your components. See [web-compone
 
 ## VSCode
 
-- lit-plugin on VSCode `runem.lit-plugin`
-- Prettier Code formatter `esbenp.prettier-vscode` : installed and configured to use the working project config (and turn on `Format on save` setting in VSCode)
+- VSCode lit-plugin: `runem.lit-plugin`
+- Prettier Code formatter `esbenp.prettier-vscode` : installed and configured to use the working project config (turn on `Format on save` setting in VSCode)
 
 # References links
 
