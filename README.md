@@ -1142,6 +1142,7 @@ Here is a collection of similar repos I inspired from to create this repo.
   - https://dev.to/sinhapiyush/introduction-to-storybook-for-web-components-jc3
   - https://code.whoisryosuke.com/docs/js/web-components/storybook/
   - https://webcomponents.dev/docs/csf/
+  - Use decorators: https://storybook.js.org/docs/vue/writing-stories/decorators
 
 - Examples:
   - https://monorepo-git-fix-button-knob-use-state.storybook.now.sh/polymer-cli/?

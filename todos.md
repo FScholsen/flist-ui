@@ -85,3 +85,5 @@
     - https://github.com/rollup/plugins/tree/master/packages/babel
 
 - [x] Add `.npmignore` in each package to exclude files from publishing
+
+- Create a drag/drop component (https://www.w3schools.com/html/html5_draganddrop.asp)
