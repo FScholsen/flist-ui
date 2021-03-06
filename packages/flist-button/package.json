@@ -1,6 +1,6 @@
 {
   "name": "@fscholsen/flist-button",
-  "version": "0.0.7-alpha.0",
+  "version": "0.0.8-alpha.0",
   "description": "Flist UI Button component",
   "author": "fscholsen <fscholsen@gmail.com>",
   "homepage": "https://github.com/FScholsen/flist-ui/tree/main/packages/flist-button#flist-button",
@@ -11,8 +11,6 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
-  "dependencies": {},
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fscholsen/flist-ui.git"
