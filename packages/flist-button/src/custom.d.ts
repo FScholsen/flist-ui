@@ -16,14 +16,19 @@ interface StoryTemplate {
 }
 
 interface StoryCustomArgs {
+  slot: string;
+  type: "submit" | "button" | "auto";
+  disabled: boolean;
+  rounded: boolean;
+  color: string;
   backgroundColor: string;
   borderColor: string;
+  fontFamily: string;
+  fontWeight: string;
+  fontSize: number;
+  cursor: string;
+  height: string;
+  width: string;
   css: string;
-  color: string;
-  onClick: () => EventHandlerNonNull;
   class: string;
-  type: "submit" | "button" | "auto";
-  rounded: boolean;
-  disabled: boolean;
-  slot: string;
 }

@@ -1,5 +1,5 @@
-// import { action } from "@storybook/addon-actions";
-import { withKnobs, text, color, select } from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
+import { withKnobs, text, color, select, number } from "@storybook/addon-knobs";
 import { html, TemplateResult } from "lit-element";
 import "../dist/flist-button";
 
@@ -8,7 +8,7 @@ export default {
   components: "flist-button",
   decorators: [withKnobs],
   actions: {
-    handles: ["onclick"],
+    handles: ["onClick"],
   },
   argTypes: {
     slot: {
@@ -19,7 +19,8 @@ export default {
     },
     type: {
       control: {
-        type: "text",
+        type: "select",
+        options: ["submit", "button", "auto"],
       },
       defaultValue: "submit",
     },
@@ -35,23 +36,82 @@ export default {
       },
       defaultValue: false,
     },
+    color: {
+      name: "--flist-button-color",
+      control: {
+        type: "color",
+      },
+      defaultValue: "white",
+    },
     backgroundColor: {
+      name: "--flist-button-bg-color",
       control: {
         type: "color",
       },
       defaultValue: "#4caf50",
     },
     borderColor: {
+      name: "--flist-button-border-color",
       control: {
         type: "color",
       },
       defaultValue: "#4caf50",
     },
-    color: {
+    fontFamily: {
+      name: "--flist-button-font-family",
       control: {
-        type: "color",
+        type: "select",
+        options: [
+          "inherit",
+          "Arial",
+          "Tahoma",
+          "Geneva",
+          "Verdana",
+          "sans-serif",
+        ],
       },
-      defaultValue: "white",
+      defaultValue: "Tahoma",
+    },
+    fontWeight: {
+      name: "--flist-button-font-weight",
+      control: {
+        type: "number",
+        range: true,
+        min: 100,
+        max: 1000,
+        step: 100,
+      },
+      defaultValue: 400,
+    },
+    fontSize: {
+      name: "--flist-button-font-size",
+      control: {
+        type: "range",
+        min: 1,
+        max: 64,
+        step: 1,
+      },
+      defaultValue: 13.333,
+    },
+    cursor: {
+      name: "--flist-button-cursor",
+      control: {
+        type: "select",
+        options: ["inherit", "pointer", "help", "progress", "wait"],
+      },
+      defaultValue: "inherit",
+    },
+    height: {
+      control: {
+        type: "text",
+      },
+      defaultValue: "auto",
+    },
+    width: {
+      control: {
+        type: "text",
+      },
+      defaultValue: "auto",
     },
     class: {
       control: {
@@ -65,61 +125,50 @@ export default {
       },
       defaultValue: "",
     },
-    onClick: {
-      action: "clicked",
-    },
   },
 };
 
-// export const actionsData = {
-//   onClick: action("onClick"),
-// };
+const actions = {
+  onClick: action("click"),
+  onFocus: action("focus"),
+};
 
 const Template: StoryTemplate = (args: StoryCustomArgs): TemplateResult => {
   return html`
     <style scoped>
       flist-button {
-        --flist-button-bg-color: ${color(
-        "--flist-button-bg-color",
-        `${args.backgroundColor}`
-      )};
-        --flist-button-border-color: ${color(
-        "--flist-button-border-color",
-        `${args.borderColor}`
-      )};
-        --flist-button-color: ${color("--flist-button-color", `${args.color}`)};
-        --flist-button-cursor: ${select(
-        "--flist-button-cursor",
-        ["pointer", "help", "progress", "wait"],
-        "help"
-      )};
-
-        height: ${text("height", "auto")};
-        width: ${text("width", "auto")};
-        font-family: ${text(
-        "font-family",
-        "Tahoma, Geneva, Verdana, sans-serif"
-      )};
-        font-weight: ${text("font-weight", "400")};
+        --flist-button-color: ${args.color};
+        --flist-button-bg-color: ${args.backgroundColor};
+        --flist-button-border-color: ${args.borderColor};
+        --flist-button-font-family: ${args.fontFamily};
+        --flist-button-font-weight: ${args.fontWeight};
+        --flist-button-font-size: ${args.fontSize}px;
+        --flist-button-cursor: ${args.cursor};
+        height: ${args.height};
+        width: ${args.width};
       }
       ${args.css}
     </style>
 
-    <script>
-      function onClick(event) {
-        //${args.onClick()};
-        console.log("onClick");
-      }
-    </script>
     <flist-button
-      @click=${args.onClick()}
+      @click=${actions.onClick}
+      @focus=${actions.onFocus}
       class=${args.class}
       type=${args.type}
       ?disabled=${args.disabled}
       ?rounded=${args.rounded}
+      @flist-button-click=${actions.onClick}
     >
       ${args.slot}
     </flist-button>
+
+    <script>
+      document
+        .querySelector("flist-button")
+        .addEventListener("flist-button-click", (event) => {
+          console.log(event);
+        });
+    </script>
   `;
 };
 
@@ -151,3 +200,73 @@ RoundedDisabled.args = {
   rounded: true,
   disabled: true,
 };
+
+export const UsingCssPart = Template.bind({});
+UsingCssPart.args = {
+  css: `flist-button::part(button) {
+    color: red;
+    font-size: 16px;
+  }`,
+};
+
+export const WithSlotSpan = Template.bind({});
+WithSlotSpan.args = {
+  slot: html`<span>hi</span>`,
+};
+
+export const WithSlotDiv = Template.bind({});
+WithSlotDiv.args = {
+  slot: html`<div><h1>Hey</h1></div>`,
+};
+
+const TemplateWithKnobs: StoryTemplate = (
+  args: StoryCustomArgs
+): TemplateResult => {
+  return html`
+    <style>
+      flist-button {
+        /* Legacy Knobs API */
+        color: ${color("color", `white`)};
+        background-color: ${color("background-color", `#4caf50`)};
+        border-color: ${color("border-color", `#4caf50`)};
+        font-family: ${text("font-family", `inherit`)};
+        font-weight: ${number("font-weight", 400, {
+          range: true,
+          min: 100,
+          max: 1000,
+          step: 100,
+        })};
+        cursor: ${select(
+          "cursor",
+          ["pointer", "help", "progress", "wait"],
+          "help"
+        )};
+        height: ${number("height", 4, {
+          range: true,
+          min: 1,
+          max: 10,
+          step: 1,
+        })}rem;
+        width: ${number("width", 4, {
+          range: true,
+          min: 1,
+          max: 10,
+          step: 1,
+        })}rem;
+      }
+    </style>
+    <flist-button
+      @click=${actions.onClick}
+      class=${args.class}
+      type=${args.type}
+      ?disabled=${args.disabled}
+      ?rounded=${args.rounded}
+      @flist-button-click=${actions.onClick}
+    >
+      ${args.slot}
+    </flist-button>
+  `;
+};
+
+export const WithKnobs = TemplateWithKnobs.bind({});
+// WithKnobs.args = {};

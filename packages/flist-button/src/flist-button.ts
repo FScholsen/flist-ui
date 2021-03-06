@@ -13,11 +13,29 @@ import {
 import { ifDefined } from "lit-html/directives/if-defined";
 import style from "./style.css";
 
+/**
+ * @element flist-button - FlistButton
+ * @attr {"submit" | "button" | "auto"} type - The type of the button
+ * @attr {String} class - The class of the button
+ * @attr {Boolean} disabled - Set to true to disable the button
+ * @attr {Boolean} rounded - Set to true to have a rounded corners button
+ * @cssprop --flist-button-color - Controls the color of the button
+ * @cssprop --flist-button-bg-color - Controls the background-color of the button
+ * @cssprop --flist-button-border-color - Controls the border-color of the button
+ * @cssprop --flist-button-font-family - Controls the font-family of the button
+ * @cssprop --flist-button-font-weight - Controls the font-weigt of the button
+ * @cssprop --flist-button-font-size - Controls the font-size of the button
+ * @cssprop --flist-button-cursor - Controls the cursor type of the button
+ * @fires flist-button-click - Dispatched when the button is clicked
+ * @csspart button - The button
+ * @slot - The default button slot
+ * @query button - The HTMLButtonElement instance
+ *
+ */
 @customElement("flist-button")
 export class FlistButton extends LitElement {
-  // Declare observed properties
   /**
-   * @type {string}
+   * @type {"submit" | "button" | "auto"}
    */
   @property({ type: String, attribute: true, reflect: true })
   type: "submit" | "button" | "auto" = "submit";
@@ -45,12 +63,6 @@ export class FlistButton extends LitElement {
    */
   @query("button")
   button?: HTMLButtonElement;
-
-  /**
-   * @type {((this: GlobalEventHandlers, ev: MouseEvent) => void) | null}
-   */
-  @property({ attribute: true, reflect: true })
-  onclick!: ((this: GlobalEventHandlers, ev: MouseEvent) => void) | null;
 
   static styles: CSSResult = unsafeCSS(style);
 
@@ -91,6 +103,9 @@ export class FlistButton extends LitElement {
 
   buttonClickHandler(event: Event): void {
     event.stopPropagation();
+    event.preventDefault();
+    this.dispatchEvent(new CustomEvent("flist-button-click"));
+    // this.dispatchEvent(new MouseEvent());
   }
 
   buttonFocusHandler(): void {
@@ -102,12 +117,10 @@ export class FlistButton extends LitElement {
   // Define the element's template
   render(): TemplateResult {
     return html`<button
+      part="button"
       .type="${this.type}"
       ?disabled="${this.disabled}"
       class="${ifDefined(this.class ? this.class : undefined)}"
-      onclick="${ifDefined(
-        ifDefined(this.onclick) === null ? undefined : ifDefined(this.onclick)
-      )}"
       @click="${this.buttonClickHandler}"
       @focus="${this.buttonFocusHandler}"
     >

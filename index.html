@@ -16,6 +16,9 @@
         width: 4rem;
         height: 4rem;
       }
+      flist-button {
+        margin: 2rem;
+      }
     </style>
   </head>
   <body>
@@ -40,6 +43,13 @@
     <h1>Inputs</h1>
     <flist-input name="name" placeholder="Search"></flist-input>
     <!-- <flist-input name="name" /> -->
+
+    <h1>Normal button</h1>
+    <button>
+      <span>icon</span>
+      <span>name</span>
+    </button>
+    <flist-button><span>icon</span> <span>name</span></flist-button>
     <script>
       let buttons = document.getElementsByTagName("flist-button");
     </script>

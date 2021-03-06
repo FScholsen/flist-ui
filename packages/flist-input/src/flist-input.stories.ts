@@ -1,5 +1,6 @@
-import { withKnobs, text } from "@storybook/addon-knobs";
-import { storiesOf } from "@storybook/web-components";
+// import { withKnobs, text } from "@storybook/addon-knobs";
+// import { storiesOf } from "@storybook/web-components";
+import { action } from "@storybook/addon-actions";
 import { html, TemplateResult } from "lit-element";
 import { ifDefined } from "lit-html/directives/if-defined";
 import { FlistInput } from "../dist/flist-input";
@@ -30,20 +31,27 @@ const TemplateLitHmtl: any = (args: StoryCustomArgs): TemplateResult => {
   `;
 };
 
-export const Primary = TemplateLitHmtl.bind({});
-Primary.args = {
+export const PrimaryLitHtml = TemplateLitHmtl.bind({});
+PrimaryLitHtml.args = {
   name: "Primary",
+};
+
+const actions = {
+  onFocus: action("focus"),
+  onBlur: action("blur"),
 };
 
 const Template: any = (args: any): any => {
   const el = new FlistInput();
   el.name = args.name;
   el.placeholder = args.placeholder;
+  el.onfocus = actions.onFocus;
+  el.onblur = actions.onBlur;
   return el;
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
+export const Primary = Template.bind({});
+Primary.args = {
   name: "Primary",
 };
 
@@ -53,11 +61,11 @@ Placeholder.args = {
 };
 
 // Legacy way of creating stories
-storiesOf("Components/FlistInput", module)
-  .addDecorator(withKnobs)
-  .add("Tertiary", (args: any) => {
-    const el = new FlistInput();
-    el.name = text("name", args.name);
-    el.placeholder = text("placeholder", args.placeholder);
-    return el;
-  });
+// storiesOf("Components/FlistInput", module)
+//   .addDecorator(withKnobs)
+//   .add("Secondary", (args: any) => {
+//     const el = new FlistInput();
+//     el.name = text("name", args.name);
+//     el.placeholder = text("placeholder", args.placeholder);
+//     return el;
+//   });
