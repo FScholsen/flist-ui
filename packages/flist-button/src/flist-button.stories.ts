@@ -130,6 +130,8 @@ export default {
 
 const actions = {
   onClick: action("click"),
+  onFlistButtonClick: action("flist-button-click"),
+  onFlistButtonDisabledClick: action("flist-button-disabled-click"),
   onFocus: action("focus"),
 };
 
@@ -151,16 +153,19 @@ const Template: StoryTemplate = (args: StoryCustomArgs): TemplateResult => {
     </style>
 
     <flist-button
-      @click=${actions.onClick}
+      @click=${args.disabled ? void 0 : actions.onClick}
       @focus=${actions.onFocus}
       class=${args.class}
       type=${args.type}
       ?disabled=${args.disabled}
       ?rounded=${args.rounded}
-      @flist-button-click=${actions.onClick}
+      @flist-button-click=${actions.onFlistButtonClick}
+      @flist-button-disabled-click=${actions.onFlistButtonDisabledClick}
     >
       ${args.slot}
     </flist-button>
+
+    <button ?disabled=${args.disabled} @click=${actions.onClick}>click</button>
 
     <script>
       document

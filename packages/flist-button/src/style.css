@@ -68,3 +68,7 @@ button:focus {
 :host button:active:not(:disabled) {
   box-shadow: none;
 }
+
+::slotted(*) {
+  display: flex !important;
+}

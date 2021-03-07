@@ -843,6 +843,9 @@ _Instead, start from scratch: create a new dir and follow the steps_
     }
     ```
 
+- Install [snowpack](https://www.snowpack.dev/) for development:
+  - Run `npm i -D snowpack `
+
 # Configuration
 
 ## Extend build configuration
@@ -1149,6 +1152,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 - Examples:
   - https://monorepo-git-fix-button-knob-use-state.storybook.now.sh/polymer-cli/?
   - https://medium.com/@annycarolinegnr/storybook-with-react-typescript-1c15a1cbc26a
+  - https://github.com/storybookjs/storybook/tree/next/addons/controls
+  - https://github.com/CodeByAlex/storybook-framework-boilerplate
 
 ## web-component-analyzer
 

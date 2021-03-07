@@ -7,6 +7,7 @@ import {
   CSSResult,
   unsafeCSS,
   query,
+  eventOptions,
 } from "lit-element";
 // See https://lit-html.polymer-project.org/guide/styling-templates
 // import { classMap } from "lit-html/directives/class-map";
@@ -27,6 +28,7 @@ import style from "./style.css";
  * @cssprop --flist-button-font-size - Controls the font-size of the button
  * @cssprop --flist-button-cursor - Controls the cursor type of the button
  * @fires flist-button-click - Dispatched when the button is clicked
+ * @fires flist-button-disabled-click - Dispatched when the button is clicked but is disabled
  * @csspart button - The button
  * @slot - The default button slot
  * @query button - The HTMLButtonElement instance
@@ -93,22 +95,26 @@ export class FlistButton extends LitElement {
   // if (this.button) this.button.onclick = () => console.log("clicked");
   // }
 
-  focusHandler(): void {
-    return this.button?.focus();
-  }
-
-  clickHandler(): void {
-    return this.button?.click();
-  }
-
-  buttonClickHandler(event: Event): void {
-    event.stopPropagation();
+  @eventOptions({ capture: true })
+  focusHandler(event: FocusEvent): void {
     event.preventDefault();
-    this.dispatchEvent(new CustomEvent("flist-button-click"));
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    console.log("focused");
+    return;
   }
 
-  buttonFocusHandler(): void {
-    // console.log("button");
+  @eventOptions({ capture: true })
+  clickHandler(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    if (this.disabled) {
+      this.dispatchEvent(new CustomEvent("flist-button-disabled-click"));
+      return;
+    }
+    this.dispatchEvent(new CustomEvent("flist-button-click"));
+    return;
   }
 
   // class="${ifDefined(!!this.class ? this.class : undefined)}"
@@ -120,10 +126,9 @@ export class FlistButton extends LitElement {
       .type="${this.type}"
       ?disabled="${this.disabled}"
       class="${ifDefined(this.class ? this.class : undefined)}"
-      @click="${this.buttonClickHandler}"
-      @focus="${this.buttonFocusHandler}"
+      tabindex="0"
     >
-      <slot>Send</slot>
+      <slot tabindex="0">Send</slot>
     </button>`;
   }
   // Add this method to render as non shadow DOM
