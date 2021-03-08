@@ -400,13 +400,12 @@ _Instead, start from scratch: create a new dir and follow the steps_
   "scripts": {
     "bootstrap": "npx lerna bootstrap && npm run build:dist && npm run build:types",
     "prebuild": "npm run clean:dist",
-    "build": "npm run build:dist",
+    "build": "npm run build:dist && npm run build:types",
     "build:dist": "npx lerna exec --parallel -- rollup -c=./rollup.config.js",
     "build:types": "npx lerna exec --parallel -- tsc -p ./tsconfig.types.json",
     "check:types": "npx tsc || echo Done.",
     "watch": "npx lerna exec -- rollup -c=./rollup.config.js -w",
     "prepare": "npx lerna bootstrap",
-    "update-packages-dependencies": "npx lerna exec -- npm update",
     "clean": "npm run clean:packages",
     "clean:packages": "npm run clean:dist && npx lerna clean",
     "clean:dist": "npx lerna exec --parallel -- rm -rf ./dist",
@@ -587,10 +586,9 @@ _Instead, start from scratch: create a new dir and follow the steps_
       extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "prettier",
-        "prettier/@typescript-eslint",
         "plugin:wc/recommended",
         "plugin:lit/recommended",
+        "prettier",
       ],
       parser: "@typescript-eslint/parser",
       parserOptions: {
