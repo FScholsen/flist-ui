@@ -843,8 +843,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
     }
     ```
 
-- Install [snowpack](https://www.snowpack.dev/) for development:
-  - Run `npm i -D snowpack `
+-
 
 # Configuration
 
@@ -1090,6 +1089,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - [LitElement documentation](https://lit-element.polymer-project.org/guide)
 
+- [Open Web Components guide](https://open-wc.org/guides/developing-components/code-examples/#lit-html-and-lit-element)
+
 - [Polymer/lit-element GitHub repo](https://github.com/Polymer/lit-element)
 
   This documentation describes how to use webcomponents polyfills (and how to include it in the client app, which is going to use the Web Components produced)
@@ -1158,3 +1159,7 @@ Here is a collection of similar repos I inspired from to create this repo.
 ## web-component-analyzer
 
 - https://www.npmjs.com/package/web-component-analyzer
+
+## Shadow DOM
+
+- https://github.com/praveenpuglia/shadow-dom-in-depth

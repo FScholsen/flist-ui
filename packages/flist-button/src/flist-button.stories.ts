@@ -5,7 +5,7 @@ import "../dist/flist-button";
 
 export default {
   title: "Components/FlistButton",
-  components: "flist-button",
+  components: ["flist-button"],
   decorators: [withKnobs],
   actions: {
     handles: ["onClick"],

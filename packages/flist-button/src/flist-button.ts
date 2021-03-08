@@ -126,9 +126,8 @@ export class FlistButton extends LitElement {
       .type="${this.type}"
       ?disabled="${this.disabled}"
       class="${ifDefined(this.class ? this.class : undefined)}"
-      tabindex="0"
     >
-      <slot tabindex="0">Send</slot>
+      <slot>Send</slot>
     </button>`;
   }
   // Add this method to render as non shadow DOM

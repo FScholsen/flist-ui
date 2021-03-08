@@ -4,10 +4,11 @@ import { action } from "@storybook/addon-actions";
 import { html, TemplateResult } from "lit-element";
 import { ifDefined } from "lit-html/directives/if-defined";
 import { FlistInput } from "../dist/flist-input";
+import "../dist/flist-input";
 
 export default {
   title: "Components/FlistInput",
-  components: FlistInput,
+  components: [FlistInput, "flist-input"],
   argTypes: {
     name: {
       control: {
