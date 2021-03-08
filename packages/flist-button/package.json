@@ -1,6 +1,6 @@
 {
   "name": "@fscholsen/flist-button",
-  "version": "0.0.10-alpha.0",
+  "version": "0.0.11-alpha.0",
   "description": "Flist UI Button component",
   "author": "fscholsen <fscholsen@gmail.com>",
   "homepage": "https://github.com/FScholsen/flist-ui/tree/main/packages/flist-button#flist-button",
