@@ -48,7 +48,11 @@ This project uses:
   We use Babel to transpile Typescript to a version of Javascript compatible with browsers we aim to support.
 
 - [Storybook](https://storybook.js.org)  
-  Storybook is a development environment for UI components. It allows you to browse a component library, view the different states of each component and interactively develop and test components.
+  Storybook is a development environment for UI components. It allows you to browse a component library, view the different states of each component and interactively develop and test components. It will be used to show a demo/preview of our components.
+
+- [Karma](https://www.npmjs.com/package/karma)
+  Karma is the tool we use to test our web components in real browsers.
+  We use
 
 # Requirements
 
@@ -240,8 +244,7 @@ _Instead, start from scratch: create a new directory and follow the steps._
     If you want to import css into your source files, proceed like this (I recommend doing like this):
 
     ```ts
-    import {
-      LitElement, ..., CSSResult, unsafeCSS} from "lit-element";
+    import {LitElement, ..., CSSResult, unsafeCSS} from "lit-element";
     import style from "./style.css";
     ...
     export class FlistInput extends LitElement {
@@ -871,7 +874,80 @@ _Instead, start from scratch: create a new directory and follow the steps._
     }
     ```
 
--
+- Install a testing framework
+
+  I choose to use the recommended toll by [open-wc](https://open-wc.org/): Karma. It allows to run our tests in real browsers (in order to simulate a real usage in a browser).
+
+  Along with this tool, I use the `Mocha` testing framework (with the Karma plugin) and `chai` assertion library (it provides several interfaces that allows to write tests). `@open-wc/testing` provide an opionated way to test web components with these dependencies.
+
+  - Run `npm install -D @open-wc/testing @open-wc/testing-karma @open-wc/karma-esm deepmerge`
+
+    Details:
+
+    - `@open-wc/testing `: it will add the `mocha` and `chai` packages as dev dependencies only for this dependency, but we need them as well for our tests (see installation below). It will allow to write the tests
+    - `@open-wc/testing-karma`: configuration for setting up testing with Karma
+    - `@open-wc/karma-esm`: Karma plugin to allow testing using es modules (without any bundling)
+    - `deepmerge`: allows to merge object (i.e. configurations) for our tests to run using the monorepo configuration.
+
+  - Run `npm install -D karma karma-mocha mocha karma-chai chai sinon karma-chrome-launcher puppeteer`
+
+    Details:
+
+    `karma-mocha`: it is an adapter for the Mocha testing framework to use by Karma
+    `karma-chai`: it is an adapter for the Chai assertion library to use by Karma
+    `sinon`: it is a dependency of chai (sinon-chai) ; it adds spy, stub and mocks to `chai`
+    `karma-chrome-launcher`: allows to use ChromeHeadless to run tests
+    `puppeteer`: allows to use headless Chromium in console environment (from Google DevTools)
+    Important note: if you run on linux, you have to install this package from `apt` to be able to start Karma in the headless chrome browser: `sudo apt-get install -y libgbm1`
+
+  - Additionally, install type declarations for `mocha` and `chai`: `npm install -D @types/mocha @types/chai`
+
+  - Create a configuration file for Karma in the monorepo `karma.conf.js`
+
+    ```js
+    const { createDefaultConfig } = require("@open-wc/testing-karma");
+    const merge = require("deepmerge");
+
+    process.env.CHROME_BIN = require("puppeteer").executablePath();
+
+    module.exports = function (config) {
+      config.set(
+        merge(createDefaultConfig(config), {
+          files: [
+            {
+              pattern: config.grep
+                ? config.grep
+                : "packages/**/tests/*.test.js",
+              type: "module",
+            },
+          ],
+          // basePath: "../../",
+          browsers: ["ChromeHeadlessNoSandbox"],
+          customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+              base: "ChromeHeadless",
+              flags: ["--no-sandbox"],
+            },
+          },
+          frameworks: ["mocha", "chai", "esm"],
+          client: {
+            mocha: { ui: "tdd" },
+          },
+          plugins: [
+            // load plugin karma-esm
+            require.resolve("@open-wc/karma-esm"),
+          ],
+          esm: {
+            // if you are using 'bare module imports' you will need this option
+            nodeResolve: true,
+            preserveSymlinks: true,
+            // babel: true
+          },
+        })
+      );
+      return config;
+    };
+    ```
 
 # Configuration
 
@@ -1204,4 +1280,12 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 ## Testing
 
+- Open Web Components recommendations:
+  - `open-wc/testing` package: https://open-wc.org/docs/testing/testing-package/#testing-testing-package
+  - mocha: https://mochajs.org/
+  - chai: https://www.chaijs.com/
+
 ### Karma
+
+- karma-esm: https://www.npmjs.com/package/@open-wc/karma-esm
+- testing witj karma-esm in a monorepo: https://www.npmjs.com/package/@open-wc/testing-karma#testing-in-a-monorepository
