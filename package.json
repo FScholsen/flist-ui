@@ -15,7 +15,7 @@
     "watch": "npx lerna exec -- rollup -c=./rollup.config.js -w",
     "prepare": "npx lerna bootstrap",
     "lint": "npm run check:types; npm run lint:css && npm run lint:lit-analyzer && npm run lint:eslint",
-    "lint:eslint": "npx lerna exec -- eslint './src' -c '../../.eslintrc.js'",
+    "lint:eslint": "npx lerna exec -- eslint '.' -c '../../.eslintrc.js' --ignore-path '../../.eslintignore'",
     "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src'",
     "lint:css": "stylelint 'packages/**/*.css'",
     "prettier": "npx lerna exec -- npx prettier --write . --ignore-path ../../.prettierignore",
