@@ -107,10 +107,15 @@ TODO
 # Installation procedure
 
 These are the steps I followed from scratch to have everything running.
-It includes repo creation, adding the dependencies, create and publish your first package.
+It includes:
 
-_You should not run those commands in your cloned local repo._
-_Instead, start from scratch: create a new dir and follow the steps_
+- creation of the repository and package
+- installation of the dependencies
+- configuration of the toolchain
+- creation and publicshing of your first package
+
+_Note: You should not run those commands in your cloned local repo._
+_Instead, start from scratch: create a new directory and follow the steps._
 
 - Create a new directory for the project: `mkdir flist-ui && cd flist-ui`
 - Create a new git repo: `git init`
@@ -133,14 +138,15 @@ _Instead, start from scratch: create a new dir and follow the steps_
   }
   ```
 
-  The line `"private": true,` was added to avoid publishing it to NPM (instead, we will publish `/packages/*` with lerna).
+  The line `"private": true,` was added to avoid publishing it to NPM (instead, we will publish `/packages/*` with `lerna publish`).
 
 - Add a `.gitignore`:
 
   ```
-  # compiled output
+  # Compiled output
   **/dist
   /tmp
+  storybook-static
 
   # IDEs and editors
   .idea
@@ -150,15 +156,21 @@ _Instead, start from scratch: create a new dir and follow the steps_
   # Logs files
   *.log
 
+  # Env files
+  .env*
+
   # Dependency directories
   node_modules/
 
   # System Files
   .DS_Store
   Thumbs.db
+
+  # Test Output
+  coverage/
   ```
 
-- Install lerna: `npm install -D lerna`
+- Install Lerna: `npm install -D lerna`
 
   It will add Lerna as dev dependency.
 
@@ -213,19 +225,19 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     In order to use `async/await` in browsers which doesn't support it, babel will transform code when using `preset-env` with `targets: "defaults"` and `useBuiltIns`. Babel won't automatically include the polyfills (helpers) for regeneratorRuntime (the default runtime used to polyfill `async/await`) so you have to include it yourself (either run `npm install regenerator-runtime` or use a core-js runtime of your choice to polyfill these features). `@babel/preset-env` just transforms code with syntax, if we don’t config useBuiltIns.
 
-    This plugin allows to use `async/await` by transforming the helpers to use the `@babel/runtime-corejs3` instead of regenerator.
+    The plugin `@babel/plugin-transform-runtime` allows to use `async/await` by transforming the helpers to use the `@babel/runtime-corejs3` instead of regenerator.
 
     `@babel/plugin-transform-runtime` can provide re-use helpers, but don’t polyfill by default.
 
     `@babel/runtime-corejs3` (or `@babel/runtime`) provide polyfills needed.
 
-    When using this runtime, Babel will inject the runtime libs (i.e. the polyfills) and will pass it to rollup when bundling in order to limit the code size (it won't import the runtime each time a call to async/await is made)). Instead of using `@babel/runtime` to include the runtime polyfills, I use `@babel/runtime-corejs3` and configure `@babel/plugin-transform-runtime` to use `corejs: 3` (to user corejs polyfills instead of regeneratorRuntime polyfills).
+    When using this runtime, Babel will inject the runtime libs (i.e. the polyfills) and will pass it to rollup when bundling in order to limit the code size (it won't import the runtime each time a call to async/await is made)). Instead of using `@babel/runtime` to include the runtime polyfills, I use `@babel/runtime-corejs3` and configure `@babel/plugin-transform-runtime` to use `corejs: 3` (to use corejs polyfills instead of regeneratorRuntime polyfills).
 
   - Run `npm install -D postcss rollup-plugin-postcss autoprefixer`
 
-    It will allow to use external css modules inside your LitElement components (by importing css into your ts files) and autoprefixer will add browsers prefixes to your styles.
+    It will allow to use external css modules inside your LitElement components (by importing css into your `ts` files) and autoprefixer will add browsers prefixes to your styles.
 
-    If you want to import css into your source files like this (I recommend doing like this):
+    If you want to import css into your source files, proceed like this (I recommend doing like this):
 
     ```ts
     import {
@@ -247,6 +259,8 @@ _Instead, start from scratch: create a new dir and follow the steps_
       export default classes;
     }
     ```
+
+    This way, the TypeScript compiler will not complain when you import these css modules (when running typechecking with `tsc`).
 
   - Create a `rollup.config.js` in the project root directory
 
@@ -333,7 +347,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
   - Install Typescript: `npm install -D typescript`
   - Install ts-lit-plugin: `npm install -D ts-lit-plugin`
 
-    It will add type checking to lit-html (dependency of lit-element) when using `tsc`.
+    It will add type checking to lit-html (it's a dependency of lit-element) when using `tsc`.
 
   - Create a `tsconfig.json` in this directory (`flist-ui`):
 
@@ -413,7 +427,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
   },
   ```
 
-- Add `lit-element` (and `lit-html`) to the monorepo:
+- Add `lit-element` to the monorepo:
 
   - Run `npm install lit-element`
 
@@ -462,7 +476,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
   };
   ```
 
-  The default behaviour is to extend the config at project root, but you can create your own if you want (by removing the imported module from the exported object config).
+  The default behaviour is to extend the config at project root, but you can create your own if you want (by removing the imported module from the exported object configuration).
 
   This configuration will allow to build each package independently if it's needed.
 
@@ -877,16 +891,23 @@ You can configure as well how type declaration files will be generated by editin
 
 You can create, in each package, a `.npmignore` file.
 
-This file should contain file or directories that you don't want to publish (to NPM or GitHub NPM Registry). You can define a diffrent one for each package (or simply omit it, if you want everything published).
+This file should contain file or directories that you don't want to publish (to NPM or GitHub NPM Registry). You can define a different one for each package (or simply omit it, if you want everything published).
 
 ```
 // ./packages/flist-button/.npmignore
 node_modules
 tests
+stories
 .babelrc
 rollup.config.js
-tsconfig.types.json
+tsconfig.types.js
 ```
+
+## Create you custom build
+
+If you need to use a specific tool to bundle (e.g. webpack, parcel, ...) you can add it separately in each package dependencies.
+
+Simply move to the directory of this component and install the dependency (`cd packages/your-component && npm i -D package/name`) or add it to the `package.json` file of the component (i.e. `packages/your-component/package.json`), then run `npx lerna bootstrap` at the monorepo root (in order to install and link cross dependencies).
 
 # Monorepo scripts
 
@@ -1180,3 +1201,7 @@ Here is a collection of similar repos I inspired from to create this repo.
 ## Shadow DOM
 
 - https://github.com/praveenpuglia/shadow-dom-in-depth
+
+## Testing
+
+### Karma
