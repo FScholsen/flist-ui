@@ -172,7 +172,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
     "version": "independent",
     "command": {
       "bootstrap": {
-        "hoist": false
+        "hoist": true
       }
     }
   }
@@ -413,6 +413,12 @@ _Instead, start from scratch: create a new dir and follow the steps_
   },
   ```
 
+- Add `lit-element` (and `lit-html`) to the monorepo:
+
+  - Run `npm install lit-element`
+
+    It will install lit-element and lit-html as dependencies of the whole project.
+
 <!-- CREATE A NEW COMPONENT -->
 
 - Create a new package `npx lerna create flist-button`.
@@ -477,7 +483,6 @@ _Instead, start from scratch: create a new dir and follow the steps_
 - Create a per-package `.babelrc`
 
   ```json
-  // .babelrc
   {
     "extends": "../../babel.config.js"
   }
@@ -510,7 +515,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
   Run this command at project root (`cd ../..` and check for `flist-ui` after running `pwd`)
 
   ```bash
-  npm run build
+  npm run build:dist
   ```
 
   It will execute `rollup` on each packages, using the `rollup.config.js` per-package configuration (which then extends the monorepo one).
@@ -520,14 +525,14 @@ _Instead, start from scratch: create a new dir and follow the steps_
   npm run build:types
   ```
 
-  Then, it will execute `tsc` on each packages, using the `tsconfig.types.json` per-package configuration.
-  This will create per-package `./dist/*.d.ts` type declaration files for each package.
+  This will execute `tsc` on each packages, using the `tsconfig.types.json` per-package configuration.
+  This will create a per-package `./dist/*.d.ts` type declaration files for each package.
 
   Note:
 
   As an alternative, you could use `npx lerna run build`, which will run `npm run build` in each package under `/packages`.  
   To use this solution, you have to add a `"build"` script in each `package.json` file of packages you want to build.  
-  You have to add build dependencies (e.g. Rollup, Babel, snowpack, ...) to each package and add a config for each of them as well.  
+  You can add build dependencies (e.g. Rollup, Babel, snowpack, ...) to each package and add a config for each of them as well (instead of using the monorepo config).  
   This way, you can have a different way of building for each component.
 
 <!-- Add Prettier and ESLint -->
@@ -541,8 +546,10 @@ _Instead, start from scratch: create a new dir and follow the steps_
     ```
     # Ignore artifacts:
     package-lock.json
-    dist
-    node_modules
+    dist/
+    node_modules/
+    storybook-static/
+    coverage/
     ```
 
   - Add a `.prettierrc`, to override the default configuration of Prettier if needed
@@ -621,9 +628,8 @@ _Instead, start from scratch: create a new dir and follow the steps_
   - Add a `.eslintignore`:
 
     ```
-    **/dist
-    **/build
-    **/node_modules
+    **/dist/**
+    **/node_modules/**
     ```
 
   - Add this to `package.json` scripts:
@@ -632,7 +638,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
     "scripts": {
       ...
       "lint": "npm run check:types; npm run lint:css && npm run lint:lit-analyzer && npm run lint:eslint",
-      "lint:eslint": "npx lerna exec -- eslint './src' -c '../../.eslintrc.js'",
+      "lint:eslint": "npx lerna exec -- eslint '.' -c '../../.eslintrc.js' --ext '.js,.ts' --ignore-path '../../.eslintignore'",
       "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src'",
       "lint:css": "stylelint 'packages/**/*.css'",
       "prettier": "npx lerna exec -- npx prettier --write . --ignore-path ../../.prettierignore",
@@ -671,6 +677,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
           ...
           "plugin:wc/recommended",
           "plugin:lit/recommended",
+          ...
         ],
         "env": {
           "browser": true   // this must be present
@@ -683,7 +690,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Fastest way is to run `npx mrm lint-staged`
 
-    Before running this command, [documentation](https://github.com/okonet/lint-staged#installation-and-setup) advise to setup `Prettier` and `ESLint`, so make sure you configure it beforehand, like explained above.
+    Before running this command, [documentation](https://github.com/okonet/lint-staged#installation-and-setup) advises to setup `Prettier` and `ESLint`, so make sure you configure it beforehand, like explained above.
 
   - Or run `npm install --D husky lint-staged`
 
@@ -708,6 +715,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
   ```
   node_modules
   tests
+  stories
   .babelrc
   rollup.config.js
   tsconfig.types.js
@@ -729,12 +737,23 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     Replace TOKEN by your personal access token and `fscholsen` by your GitHub owner name.
 
+    _Note:_
+
+    _To avoid exposing your token, you can hoist it to your per-user `.npmrc` located at `~/.npmrc`. To do so, just add this line to this file:_
+
+    ```
+    # .npmrc
+    //npm.pkg.github.com/:\_authToken=TOKEN
+    ```
+
+    _Then remove it from your per-project (i.e. `flist-ui/.npmrc`)._
+
   - Add this to your monorepo `package.json`:
 
     ```json
     "repository": {
       "type": "git",
-      "url": "https://github.com/fscholsen/flist-ui.git"
+      "url": "git+https://github.com/fscholsen/flist-ui.git"
     },
     ```
 
@@ -752,11 +771,8 @@ _Instead, start from scratch: create a new dir and follow the steps_
     "main": "dist/flist-button.js",
     "module": "dist/flist-button.js",
     "types": "dist/flist-button.d.ts",
-    "dependencies": {
-      "lit-element": "^2.4.0"
-    },
-    "devDependencies": {
-      "typescript": "^4.2.2"
+    "scripts": {
+      ...
     },
     "repository": {
       "type": "git",
@@ -767,9 +783,9 @@ _Instead, start from scratch: create a new dir and follow the steps_
     },
     ```
 
-    Lerna will execute npm publish using this config in each package.
+    Lerna will execute `npm publish` using this config in each package.
 
-    Replace the `fscholsen/flist-ui` according to your name and repository name.
+    Replace the `fscholsen/flist-ui` according to your name and repository name. Use your GitHub user name as the scope for your package (`@<your-username>/<package-name>`).
 
     - Make some changes to the source files
     - Add and commit with git
@@ -777,7 +793,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
       You can see the changes with `npx lerna changed`, running this at project root (it should output: `1 package ready to publish`)
 
-    - (at project root again) `npx lerna publish`, specify github credentials and package new version after publish
+    - (at project root again) `npx lerna publish`, specify your github credentials and insert a package new version (which will be added after publish).
 
       Lerna will create a tag when executing publish.
 
@@ -797,7 +813,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
     ```js
     module.exports = {
-      stories: ["../packages/**/*.stories.@(js|ts)"],
+      stories: ["../packages/**/stories/*.stories.@(js|ts)"],
       addons: [
         "@storybook/addon-links",
         "@storybook/addon-essentials",
@@ -810,9 +826,9 @@ _Instead, start from scratch: create a new dir and follow the steps_
 
   - Create stories for components:
 
-    - Create a new file inside one of your components' `src/` directory:
+    - Create a new file inside one of your components' `stories/` directory:
 
-      It must match the file pattern defined above (i.e. something ending with `src/*.stories.js`):
+      It must match the file pattern defined above (i.e. something ending with `stories/*.stories.@(js|ts)`):
 
       ```js
       // packages/flist-button/src/flist-button.stories.js
@@ -836,7 +852,7 @@ _Instead, start from scratch: create a new dir and follow the steps_
     ```json
     {
       "scripts": {
-        "docs": "wca analyze 'packages/**/src/*.ts' --format markdown"
+        "docs": "npx wca analyze 'packages/**/src/*.ts' --format markdown"
       }
     }
     ```
@@ -947,12 +963,15 @@ This command will generate documentation about your components. See [web-compone
 # Monorepo structure
 
 ```
+├── .storybook
+├── .vscode
 ├── node_modules
 ├── packages
 │   ├── package-name
 │   │   ├── dist          // only once the package is built
-│   │   ├── node_modules  // only once the package is bootstrapped (install packages dependencies)
+│   │   ├── node_modules  // only once the package is bootstrapped (install packages dependencies -should be empty, unless you installed dependencies to this package-)
 │   │   ├── src
+│   │   ├── stories
 │   │   ├── tests
 │   │   ├── .babelrc
 │   │   ├── .npmignore
@@ -962,8 +981,8 @@ This command will generate documentation about your components. See [web-compone
 │   │   ├── rollup.config.js
 │   │   └── tsconfig.types.json
 │   └── ...
-├── .env
 ├── .editorconfig
+├── .env
 ├── .eslintignore
 ├── .eslintrc.js
 ├── .gitattributes
