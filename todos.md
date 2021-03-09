@@ -87,3 +87,5 @@
 - [x] Add `.npmignore` in each package to exclude files from publishing
 
 - Create a drag/drop component (https://www.w3schools.com/html/html5_draganddrop.asp)
+
+- Create a component which is a background component, made with a canvas, having "stars" moving inside (like a "space-component")
