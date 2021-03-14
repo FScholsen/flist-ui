@@ -21,6 +21,7 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
+      "@fscholsen/*": ["packages/*/src"],
       "*": ["node_modules", "packages"]
     },
     "plugins": [

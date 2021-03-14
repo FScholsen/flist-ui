@@ -378,6 +378,7 @@ _Instead, start from scratch: create a new directory and follow the steps._
         "skipLibCheck": true,
         "baseUrl": "./",
         "paths": {
+          "@fscholsen/*": ["packages/*/src"],
           "*": ["node_modules", "packages"]
         },
         "plugins": [
@@ -1190,6 +1191,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 
   By using the latter one, you don't have to include the `regenerator-runtime`, neither the `core-js` as dependencies ; instead you have to use the `@babel/runtime`.
 
+- TypeScript, Rollup, ESLint, Babel: https://github.com/localSummer/rollup-pro
+
 ## Babel
 
 - Babel config files for monorepo structure: https://babeljs.io/docs/en/config-files#monorepos
@@ -1226,6 +1229,10 @@ Here is a collection of similar repos I inspired from to create this repo.
 ## Web Components
 
 - Web Components Polyfills: https://github.com/webcomponents/polyfills
+
+## Custom Elements
+
+- https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
 
 ## LitElement and lit-html
 

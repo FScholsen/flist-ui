@@ -1,4 +1,6 @@
 "use strict";
+import { suite, test } from "mocha";
+import chai from "chai";
 import { html, fixture } from "@open-wc/testing";
 import { FlistInput } from "../dist/flist-input";
 
