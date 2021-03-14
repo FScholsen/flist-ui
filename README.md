@@ -50,9 +50,9 @@ This project uses:
 - [Storybook](https://storybook.js.org)  
   Storybook is a development environment for UI components. It allows you to browse a component library, view the different states of each component and interactively develop and test components. It will be used to show a demo/preview of our components.
 
-- [Karma](https://www.npmjs.com/package/karma)
-  Karma is the tool we use to test our web components in real browsers.
-  We use
+- [Karma](https://www.npmjs.com/package/karma)  
+  Karma is the test runner we use to execute the tests for our web components in real browsers.  
+  We use [Mocha](https://mochajs.org/) as testing framework and [chai](https://www.chaijs.com/) as assertion library to write our tests.
 
 # Requirements
 
@@ -902,6 +902,8 @@ _Instead, start from scratch: create a new directory and follow the steps._
 
   - Additionally, install type declarations for `mocha` and `chai`: `npm install -D @types/mocha @types/chai`
 
+    This is required when writing tests using TypeScript.
+
   - Create a configuration file for Karma in the monorepo `karma.conf.js`
 
     ```js
@@ -926,7 +928,7 @@ _Instead, start from scratch: create a new directory and follow the steps._
           customLaunchers: {
             ChromeHeadlessNoSandbox: {
               base: "ChromeHeadless",
-              flags: ["--no-sandbox"],
+              flags: ["--headless", "--no-sandbox"],
             },
           },
           frameworks: ["mocha", "chai", "esm"],
@@ -948,6 +950,18 @@ _Instead, start from scratch: create a new directory and follow the steps._
       return config;
     };
     ```
+
+  - Update your `package.json` scripts:
+
+    ```json
+    "scripts": {
+      ...
+      "test": "karma start karma.conf.js",
+      ...
+    }
+    ```
+
+    This will allow to run all your tests from the monorepo root.
 
 # Configuration
 
@@ -1056,6 +1070,20 @@ npm run docs
 ```
 
 This command will generate documentation about your components. See [web-component-analyzer](https://github.com/runem/web-component-analyzer).
+
+## test
+
+```bash
+npm run test
+```
+
+or
+
+```bash
+npm test
+```
+
+This command will run Karma test suite (with `Mocha`). See the `karma.config.js`.
 
 # Monorepo structure
 
@@ -1175,6 +1203,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - Universal build: https://lit-element.polymer-project.org/guide/build#supporting-older-browsers
 
+- LitElement with Babel, rollup and Karma: https://43081j.com/2018/09/polymer-lit-with-rollup
+
 ## Typescript
 
 - Typescript `baseUrl` option: https://www.typescriptlang.org/docs/handbook/module-resolution.html#base-url
@@ -1281,11 +1311,42 @@ Here is a collection of similar repos I inspired from to create this repo.
 ## Testing
 
 - Open Web Components recommendations:
+
   - `open-wc/testing` package: https://open-wc.org/docs/testing/testing-package/#testing-testing-package
+  - karma: http://karma-runner.github.io/0.13/index.html
   - mocha: https://mochajs.org/
   - chai: https://www.chaijs.com/
+  - puppeteer: https://github.com/puppeteer/puppeteer
+  - Testing workflow for web components: https://open-wc.org/blog/testing-workflow-for-web-components ([GitHub repo](https://github.com/daKmoR/testing-workflow-for-web-components))
+
+- Karma + Mocha + chai in headless chrome: https://developers.google.com/web/updates/2017/06/headless-karma-mocha-chai
+- libgdm1 dependency (apt package) to run test on linux server: https://github.com/actions/virtual-environments/issues/732
+- Karma configuration to run ChromeHeadless with `--no-sandbox` option: https://github.com/karma-runner/karma-chrome-launcher/issues/158
+- open-wc repo: https://github.com/open-wc/open-wc
+- Open Web Components testing stubs: https://open-wc.org/guides/knowledge/testing/stubs/
 
 ### Karma
 
+- Karma npm: https://www.npmjs.com/package/karma
+- @open-wc/testing: [npm package](https://www.npmjs.com/package/@open-wc/testing), [GitHub repo](https://github.com/open-wc/open-wc/tree/master/packages/testing)
 - karma-esm: https://www.npmjs.com/package/@open-wc/karma-esm
-- testing witj karma-esm in a monorepo: https://www.npmjs.com/package/@open-wc/testing-karma#testing-in-a-monorepository
+- Testing with karma-esm in a monorepo:
+  - https://www.npmjs.com/package/@open-wc/testing-karma#testing-in-a-monorepository
+  - https://www.npmjs.com/package/@open-wc/testing-karma#preserving-symlinks
+- test webcomponents with karma and typescript: https://labs.thisdot.co/blog/testing-web-components-with-karma-and-typescript
+- karma chrome launcher: https://github.com/karma-runner/karma-chrome-launcher
+- Karma with puppeteer ChromeHeadless: https://medium.com/@rogeriopvl/automating-karma-and-headless-chrome-with-puppetteer-51ce8f6a78b0 (tldr; set CHROME_BIN env var for the running process to use puppeteer executable)
+
+### Mocha and Chai
+
+- Mocha bdd (`beforeEach()` (bdd) becomes `setup()`): https://mochajs.org/#available-root-hooks
+- Mocha and chai with LitElement example (with code coverage): https://dev.to/open-wc/testing-workflow-for-web-components-g73
+
+## Automate package creation
+
+To write a script that automatically creates package structure:
+
+- https://github.com/SBoudrias/Inquirer.js
+- https://github.com/npm-js-ts-angular-modules-course/extra-node-cli-project-generator
+- https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e
+- https://medium.com/skilllane/build-an-interactive-cli-application-with-node-js-commander-inquirer-and-mongoose-76dc76c726b6
