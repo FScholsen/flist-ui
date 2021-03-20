@@ -1,8 +1,8 @@
 "use strict";
-import { suite, test } from "mocha";
-import { assert } from "chai";
+
 import { html, fixture } from "@open-wc/testing";
 import { FlistInput } from "../dist/flist-input";
+const assert = chai.assert;
 
 suite("flist-input", () => {
   test("is defined", () => {
