@@ -14,6 +14,7 @@
     "check:types": "npx tsc || echo Done.",
     "watch": "npx lerna exec -- rollup -c=./rollup.config.js -w",
     "prepare": "npx lerna bootstrap",
+    "publish": "npx lerna publish",
     "lint": "npm run check:types; npm run lint:css && npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "npx lerna exec -- eslint '.' -c '../../.eslintrc.js' --ext '.js,.ts' --ignore-path '../../.eslintignore'",
     "lint:lit-analyzer": "npx lerna exec -- lit-analyzer './src'",
