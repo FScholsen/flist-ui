@@ -106,7 +106,17 @@ Replace TOKEN with your personal access token (**without** single/double quotes)
 
 ## Create a new package
 
-TODO
+```bash
+npm run create-package
+```
+
+Enter a package name.
+
+It must contain an hyphen, as mentionned in custom elements [documentation](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements).
+
+Start developping now.
+
+---
 
 # Installation procedure
 
@@ -964,6 +974,42 @@ _Instead, start from scratch: create a new directory and follow the steps._
 
     This will allow to run all your tests from the monorepo root.
 
+- Create a CLI script to automate package generation:
+
+  - Create a new folder at monorepo root: `mkdir bin`
+  - Create a new file named in this directory: `bin/cli.js` (to use npm's recommended best practices), and add this line at the top of the file:
+
+    ```js
+    #!/usr/bin/env node
+
+    "use strict";
+
+    ```
+
+    This will conert the JS file into a NodeJS command-line script (it can be executed by a locally installed node program).
+
+  - Make the file executable:
+
+    ```bash
+    chmod +x bin/cli.js
+    ```
+
+  - Add a new script to `package.json`:
+
+    ```json
+    "scripts": {
+      "create-package": "bin/cli.js create-package",
+    },
+    ```
+
+  - Install [inquirer.js](https://github.com/SBoudrias/Inquirer.js):
+
+    ```bash
+    npm install -D inquirer
+    ```
+
+    It will allow to prompt the user when our cli script runs (to ask questions like 'which package name').
+
 # Configuration
 
 ## Extend build configuration
@@ -1085,6 +1131,14 @@ npm test
 ```
 
 This command will run Karma test suite (with `Mocha`). See the `karma.config.js`.
+
+## create-package
+
+```bash
+npm run create-package
+```
+
+This command will prompt you to choose a package name and will create and prepare a new folder structure in `packages` directory. Everything will be set up for you to start working.
 
 # Monorepo structure
 

@@ -1,0 +1,24 @@
+{
+  "name": "@fscholsen/new-package",
+  "version": "0.0.0",
+  "description": "",
+  "author": "fscholsen <fscholsen@gmail.com>",
+  "homepage": "https://github.com/FScholsen/flist-ui/tree/main/packages/new-package#new-package",
+  "license": "ISC",
+  "main": "dist/new-package.js",
+  "module": "dist/new-package.js",
+  "types": "dist/new-package.d.ts",
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fscholsen/flist-ui.git"
+  },
+  "publishConfig": {
+    "@fscholsen:registry": "https://npm.pkg.github.com/fscholsen"
+  },
+  "bugs": {
+    "url": "https://github.com/fscholsen/flist-ui/issues"
+  }
+}

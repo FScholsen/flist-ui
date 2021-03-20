@@ -1,9 +1,8 @@
 "use strict";
 import { suite, test, setup } from "mocha";
-import chai from "chai";
+import { assert } from "chai";
 import { html, fixture, expect } from "@open-wc/testing";
 import { FlistButton } from "../dist/flist-button";
-const assert = chai.assert;
 
 suite("flist-button empty", () => {
   let element;

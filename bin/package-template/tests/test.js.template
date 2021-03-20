@@ -1,0 +1,3 @@
+describe("new-package", () => {
+  it("needs tests");
+});

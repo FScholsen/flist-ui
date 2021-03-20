@@ -1,0 +1,17 @@
+import { LitElement, html, customElement, property } from "lit-element";
+
+@customElement("new-package")
+export class NewPackage extends LitElement {
+  @property()
+  name = "";
+
+  render() {
+    return html``;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "new-package": NewPackage;
+  }
+}
