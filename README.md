@@ -1145,6 +1145,7 @@ This command will prompt you to choose a package name and will create and prepar
 ```
 ├── .storybook
 ├── .vscode
+├── bin
 ├── node_modules
 ├── packages
 │   ├── package-name
@@ -1173,6 +1174,7 @@ This command will prompt you to choose a package name and will create and prepar
 ├── .stylelintrc
 ├── babel.config.js
 ├── index.html
+├── karma.conf.js
 ├── lerna.json
 ├── package-lock.json
 ├── package.json
