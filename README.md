@@ -1249,6 +1249,8 @@ Here is a collection of similar repos I inspired from to create this repo.
 
 - TypeScript, Rollup, ESLint, Babel: https://github.com/localSummer/rollup-pro
 
+- Typescript + litelement app starter: https://github.com/djlauk/ts-app-starter
+
 ## Babel
 
 - Babel config files for monorepo structure: https://babeljs.io/docs/en/config-files#monorepos
