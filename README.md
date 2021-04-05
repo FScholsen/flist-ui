@@ -120,13 +120,13 @@ Start developping now.
 
 # Installation procedure
 
-These are the steps I followed from scratch to have everything running.
+These are the steps I followed from scratch to have everything running.  
 It includes:
 
 - creation of the repository and package
 - installation of the dependencies
 - configuration of the toolchain
-- creation and publicshing of your first package
+- creation and publishing of your first package
 
 _Note: You should not run those commands in your cloned local repo._
 _Instead, start from scratch: create a new directory and follow the steps._
@@ -1040,7 +1040,7 @@ rollup.config.js
 tsconfig.types.js
 ```
 
-## Create you custom build
+## Create your custom build
 
 If you need to use a specific tool to bundle (e.g. webpack, parcel, ...) you can add it separately in each package dependencies.
 
