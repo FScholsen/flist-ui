@@ -1215,6 +1215,16 @@ Here is a collection of similar repos I inspired from to create this repo.
 
   An example of a lit-element library monorepo using rollup
 
+- Weightless Web Components:
+
+  - [GitHub](https://github.com/andreasbm/weightless)
+  - [website](https://weightless.dev/)
+  - [WebComponents page](https://www.webcomponents.org/element/weightless)
+
+- Home-Assistant Frontend: https://github.com/home-assistant/frontend
+
+  GitHub repo for Home-Assistant home automation software, containing a library of web components
+
 - https://lit-element.polymer-project.org/guide/build
 
 - https://github.com/johnagan/clean-webpack-plugin/blob/2b94838bd140cbf9d6b6f5449de7d1e676ed87b2/tsconfig.types.json
